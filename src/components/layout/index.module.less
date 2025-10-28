@@ -1,0 +1,32 @@
+@header-height: 64px;
+@left-width: 256px;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: @header-height;
+  width: 100%;
+  background: darkslategray;
+}
+
+.main {
+  display: flex;
+}
+
+.left {
+  position: fixed;
+  top: @header-height;
+  left: 0;
+  bottom: 0;
+  width: @left-width;
+  background: #001529;
+}
+
+.center {
+  padding-top: @header-height;
+  padding-left: @left-width;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: red;
+}
