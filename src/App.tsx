@@ -1,5 +1,5 @@
-import {Suspense, useEffect} from 'react'
-import {Layout} from '@/components';
+import { Suspense, useEffect } from 'react'
+import { Layout, GlobalLoading } from '@/components';
 import AppRouter from './AppRouter.tsx';
 
 export default function App() {
@@ -11,8 +11,8 @@ export default function App() {
   }, []);
   return (
     <Layout>
-      <Suspense fallback={<p>Suspense Loading...</p>}>
-        <AppRouter/>
+      <Suspense fallback={<GlobalLoading />}>
+        <AppRouter />
       </Suspense>
     </Layout>
   )

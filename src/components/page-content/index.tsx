@@ -1,8 +1,8 @@
-import type {ReactNode} from "react";
+import type { ReactNode } from "react";
 import s from './index.module.less';
 import c from 'classnames';
-import {SpinLoading} from 'antd-mobile'
-import {SafeArea} from 'antd-mobile'
+import { GlobalLoading } from '../global-loading'
+import { SafeArea } from 'antd-mobile'
 
 
 export type PageContentProps = {
@@ -12,15 +12,15 @@ export type PageContentProps = {
 }
 
 export function PageContent(props: PageContentProps) {
-  const {children, className, loading, ...others} = props;
+  const { children, className, loading, ...others } = props;
 
   return (
     <>
-      {loading && <div className={s.loading}><SpinLoading color="primary"/></div>}
+      {loading && <GlobalLoading />}
       <div className={c(s.root, className)} {...others}>
-        <SafeArea position="top"/>
+        <SafeArea position="top" />
         {children}
-        <SafeArea position="bottom"/>
+        <SafeArea position="bottom" />
       </div>
     </>
   )
