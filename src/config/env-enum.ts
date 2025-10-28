@@ -1,4 +1,4 @@
-import { createEnum, type PickEnumValues } from '@rc-lib/enum';
+import {createEnum, type PickEnumValues} from '@/components';
 
 export const envEnum = createEnum({
   DEVELOPMENT: ['development', '开发环境'],

@@ -15,7 +15,7 @@ export default config<HomeProps>({
 // Home必须单独定义，否则会影响 hot updated
 function Home() {
   return (
-    <PageContent className={s.root}>
+    <PageContent className={s.root} loading>
       <Button>首页啊</Button>
       <div className={s.test}></div>
     </PageContent>
