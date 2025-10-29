@@ -1,6 +1,6 @@
 module.exports = {
   plugins: {
-    'postcss-px-to-viewport': {
+    'postcss-px-to-viewport-8-plugin': {
       unitToConvert: 'px',          // 需要转换的单位
       viewportWidth: 375,           // 设计稿宽度（AntD Mobile 默认是 375）
       unitPrecision: 6,             // 转换后精度

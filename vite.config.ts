@@ -19,9 +19,6 @@ export default defineConfig({
       include: ['src/**/*.ts', 'src/**/*.tsx'], // 你可以按需配置
     }),
   ],
-  css: {
-    postcss: './postcss.config.cjs', // 可选，Vite 会自动识别
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

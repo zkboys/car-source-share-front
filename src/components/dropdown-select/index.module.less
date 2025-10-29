@@ -1,6 +1,7 @@
 .root {
   --adm-color-background: none;
   --adm-color-light: var(--adm-color-text);
+
   :global {
     .adm-dropdown-item-highlight,
     .adm-dropdown-item .adm-dropdown-item-title-arrow-active {
@@ -8,9 +9,23 @@
     }
   }
 }
-.item {
-  cursor: pointer;
-}
-.active {
-  color: var(--adm-color-primary);
+
+.itemWrap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 16px;
+
+  .item {
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid var(--adm-color-border);
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .active {
+    color: var(--adm-color-primary);
+    border-color: var(--adm-color-primary);
+  }
 }
