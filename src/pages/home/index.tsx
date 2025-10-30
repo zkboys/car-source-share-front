@@ -96,25 +96,30 @@ function Home() {
       return isBrand && isSource;
     });
     nextDataSource.sort((a, b) => {
-      if (sorter === 'all') {
-        if (b.createTime > a.createTime) return 1;
-        if (b.createTime < a.createTime) return -1;
-        return 0;
-      }
+      const aTime = a.createTime || '';
+      const bTime = b.createTime || '';
       const aPrice = extractNumber(a.exportPrice);
       const bPrice = extractNumber(b.exportPrice);
 
-      if (sorter === 'desc') {
-        if (bPrice > aPrice) return 1;
-        if (bPrice < aPrice) return -1;
+      if (sorter === 'all') {
+        if (bTime > aTime) return 1;
+        if (bTime < aTime) return -1;
         return 0;
-      } else {
+      }
+      if (sorter === 'desc') {
         if (bPrice > aPrice) return -1;
         if (bPrice < aPrice) return 1;
         return 0;
       }
+      if (sorter === 'asc') {
+        if (bPrice > aPrice) return -1;
+        if (bPrice < aPrice) return 1;
+        return 0;
+      }
+      return 0;
     });
 
+    console.log(nextDataSource);
     setDataSource(nextDataSource);
   }, [dropdownValue, originDataSource]);
 
