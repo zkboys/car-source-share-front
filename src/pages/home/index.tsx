@@ -119,7 +119,6 @@ function Home() {
       return 0;
     });
 
-    console.log(nextDataSource);
     setDataSource(nextDataSource);
   }, [dropdownValue, originDataSource]);
 
