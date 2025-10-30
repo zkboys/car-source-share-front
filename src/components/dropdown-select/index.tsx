@@ -9,7 +9,7 @@ type ItemType = {
   isAll?: boolean;
   children?: ItemType[];
 }
-export type DropdownSelectValue = Record<string, any>;
+export type DropdownSelectValue = Record<string, string | string[]>;
 export type DropdownSelectProps = {
   className?: string;
   items: ItemType[];
@@ -43,9 +43,13 @@ export function DropdownSelect(props: DropdownSelectProps) {
                         if (isAll) {
                           value[key] = [k];
                         } else if (values?.includes(k)) {
-                          value[key] = values.filter((it: string) => it !== k);
+                          if (typeof values !== "string") {
+                            value[key] = values.filter((it: string) => it !== k);
+                          }
                         } else {
-                          value[key] = [...values.filter((it: string) => !children.find(i => i.key === it && i.isAll)), k];
+                          if (typeof values !== "string") {
+                            value[key] = [...values.filter((it: string) => !children.find(i => i.key === it && i.isAll)), k];
+                          }
                         }
                       } else {
                         value[key] = k;

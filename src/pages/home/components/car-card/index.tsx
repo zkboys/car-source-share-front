@@ -1,11 +1,13 @@
 import s from "./index.module.less";
 import wechatImg from './wechat.svg';
-import { Dialog, Ellipsis } from "antd-mobile";
+import {Dialog, Ellipsis} from "antd-mobile";
 
-export type CarCardProps = {
+export type CarSource = {
   id: string | number;
   /** 图片 */
-  image: string;
+  carPhoto: string;
+  /** 品牌 */
+  brand: string;
   /** 名称 */
   title: string;
   /** 英文名称 */
@@ -14,7 +16,7 @@ export type CarCardProps = {
   guidePrice: number;
   /** 优惠金额 */
   discountAmount: number;
-  /** 出口方式 */
+  /** TODO  出口方式 */
   exportMethod: string;
   /** 出口价 */
   exportPrice: number;
@@ -26,17 +28,18 @@ export type CarCardProps = {
   deliveryCity: string;
   /** 保险类型 */
   insuranceType: string;
-  /** 微信号 */
-  wechatId: string;
-  /** 微信名称 */
-  wechatName: string;
+  /** 微信二维码图片 */
+  weChat: string;
+  /** 联系人姓名 */
+  contact: string;
+  /** 联系人手机号 */
+  number: string;
 };
 
-export function CarCard(props: CarCardProps) {
+export function CarCard(props: CarSource) {
   const {
-    image,
+    carPhoto,
     title,
-    titleEn,
     guidePrice,
     discountAmount,
     exportMethod,
@@ -45,17 +48,17 @@ export function CarCard(props: CarCardProps) {
     deliveryType,
     deliveryCity,
     insuranceType,
-    wechatId,
-    wechatName,
+    number,
+    contact,
   } = props;
 
   return (
     <div className={s.root}>
       <div className={s.top}>
-        <img src={image} alt={title} className={s.image} />
+        <img src={carPhoto} alt={title} className={s.image}/>
         <div className={s.titleWrap}>
           <div className={s.title}>
-            <Ellipsis direction="end" rows={2} content={title} />
+            <Ellipsis direction="end" rows={2} content={title}/>
           </div>
         </div>
       </div>
@@ -88,15 +91,15 @@ export function CarCard(props: CarCardProps) {
         onClick={() =>
           Dialog.alert({
             content: (
-              <div className={s.wechat}>
-                <div className={s.wechatName}>{wechatName}</div>
-                <div>微信：<a className={s.wechatId} href={`tel:${wechatId}`}>{wechatId}</a></div>
+              <div className={s.contactInfo}>
+                <div className={s.contact}>{contact}</div>
+                <div>微信：<a className={s.number} href={`tel:${number}`}>{number}</a></div>
               </div>
             ),
           })
         }
       >
-        <img className={s.wechatIcon} src={wechatImg} alt="微信" />
+        <img className={s.wechatIcon} src={wechatImg} alt="微信"/>
         <span className={s.contactText}>加微信</span>
       </div>
     </div>
