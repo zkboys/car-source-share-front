@@ -52,6 +52,9 @@ export function DropdownSelect(props: DropdownSelectProps) {
                           }
                         }
                         if (!value[key]?.length) value[key] = ['all'];
+                        if (value[key]?.length > 1) {
+                          value[key] = (value[key] as []).filter(it => it !== 'all');
+                        }
                       } else {
                         value[key] = k;
                       }
