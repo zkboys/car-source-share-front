@@ -26,6 +26,7 @@ export function getPageConfig(pathname: string = window.location.pathname): Page
  * @returns 提取的数字，如 3.2
  */
 export function extractNumber(str: string): number {
+  if (!str) return 0;
   // 使用正则表达式匹配数字（包括小数点）
   const match = str.match(/(\d+\.?\d*)/);
 
