@@ -1,8 +1,9 @@
 import s from "./index.module.less";
 import wechatImg from './wechat.svg';
-import {Dialog, Ellipsis} from "antd-mobile";
+import { Dialog, Ellipsis } from "antd-mobile";
 
 export type CarCardProps = {
+  id: string | number;
   /** 图片 */
   image: string;
   /** 名称 */
@@ -51,13 +52,10 @@ export function CarCard(props: CarCardProps) {
   return (
     <div className={s.root}>
       <div className={s.top}>
-        <img src={image} alt={title} className={s.image}/>
+        <img src={image} alt={title} className={s.image} />
         <div className={s.titleWrap}>
           <div className={s.title}>
-            <Ellipsis direction="end" rows={2} content={title}/>
-          </div>
-          <div className={s.titleEn}>
-            <Ellipsis direction="end" rows={2} content={titleEn}/>
+            <Ellipsis direction="end" rows={2} content={title} />
           </div>
         </div>
       </div>
@@ -98,7 +96,7 @@ export function CarCard(props: CarCardProps) {
           })
         }
       >
-        <img className={s.wechatIcon} src={wechatImg} alt="微信"/>
+        <img className={s.wechatIcon} src={wechatImg} alt="微信" />
         <span className={s.contactText}>加微信</span>
       </div>
     </div>
