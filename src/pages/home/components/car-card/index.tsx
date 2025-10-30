@@ -13,13 +13,13 @@ export type CarSource = {
   /** 英文名称 */
   titleEn: string;
   /** 指导价 */
-  guidePrice: number;
+  guidePrice: string;
   /** 优惠金额 */
   discountAmount: number;
   /** 出口方式 */
   exportMethod: string;
   /** 出口价 */
-  exportPrice: number;
+  exportPrice: string;
   /** 颜色 */
   color: string;
   /** 提车类型 比如 现车 */
@@ -34,6 +34,8 @@ export type CarSource = {
   contact: string;
   /** 联系人手机号 */
   number: string;
+  /** 创建时间 */
+  createTime: string;
 };
 
 export function CarCard(props: CarSource) {

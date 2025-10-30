@@ -5,6 +5,7 @@ import {PageContent, DropdownSelect} from "@/components";
 import {CarCard, type CarSource} from "./components";
 import {ErrorBlock, Toast} from "antd-mobile";
 import axios from 'axios';
+import {extractNumber} from "@/commons";
 
 type HomeProps = {
   title: string;
@@ -95,8 +96,23 @@ function Home() {
       return isBrand && isSource;
     });
     nextDataSource.sort((a, b) => {
-      if (sorter === 'all') return 0;
-      return sorter === 'desc' ? b.exportPrice - a.exportPrice : a.exportPrice - b.exportPrice;
+      if (sorter === 'all') {
+        if (b.createTime > a.createTime) return 1;
+        if (b.createTime < a.createTime) return -1;
+        return 0;
+      }
+      const aPrice = extractNumber(a.exportPrice);
+      const bPrice = extractNumber(b.exportPrice);
+
+      if (sorter === 'desc') {
+        if (bPrice > aPrice) return 1;
+        if (bPrice < aPrice) return -1;
+        return 0;
+      } else {
+        if (bPrice > aPrice) return -1;
+        if (bPrice < aPrice) return 1;
+        return 0;
+      }
     });
 
     setDataSource(nextDataSource);
