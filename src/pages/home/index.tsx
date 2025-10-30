@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import s from './index.module.less';
 import {config} from "@/config-hoc";
 import {PageContent, DropdownSelect} from "@/components";
-import {CarCard, type CarSource} from "./components";
+import {CarCard, type CarSource, Header} from "./components";
 import {ErrorBlock, Toast} from "antd-mobile";
 import axios from 'axios';
 import {extractNumber} from "@/commons";
@@ -167,6 +167,7 @@ function Home() {
   return (
     <PageContent className={s.root} loading={loading}>
       <div className={s.top}>
+        <Header/>
         <DropdownSelect
           value={dropdownValue}
           onChange={(value) => setDropdownValue(value as DropdownValueType)}
