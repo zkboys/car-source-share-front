@@ -65,11 +65,11 @@ export function CarCard(props: CarSource) {
       <div className={s.priceInfo}>
         <div className={s.priceItem}>
           <span className={s.label}>指导价</span>
-          <span className={s.value}>{guidePrice}万</span>
+          <span className={s.value}>{guidePrice}</span>
         </div>
         <div className={s.priceItem}>
           <span className={s.label}>优惠金额</span>
-          <span className={s.value}>{discountAmount}万</span>
+          <span className={s.value}>{discountAmount}</span>
         </div>
         <div className={s.priceItem}>
           <span className={s.label}>出口方式</span>
@@ -77,7 +77,7 @@ export function CarCard(props: CarSource) {
         </div>
         <div className={s.priceItem}>
           <span className={s.label}>出口价</span>
-          <span className={s.value}>${exportPrice}.00</span>
+          <span className={s.value}>{exportPrice}</span>
         </div>
       </div>
       <div className={s.details}>
@@ -87,7 +87,7 @@ export function CarCard(props: CarSource) {
         <span className={s.detailItem}>{insuranceType}</span>
       </div>
       <div
-        className={s.contact}
+        className={s.contactWrap}
         onClick={() =>
           Dialog.alert({
             content: (

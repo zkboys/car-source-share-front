@@ -35,7 +35,26 @@ function Home() {
     brand: ['all'],
     source: ['all'],
   });
-  const [originDataSource, setOriginDataSource] = useState<CarSource []>([]);
+  const [originDataSource, setOriginDataSource] = useState<CarSource []>([
+    // {
+    //   id: "1",
+    //   carPhoto: "https://images.unsplash.com/photo-1567945716310-4745a6b7844b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=60",
+    //   brand: "丰田",
+    //   title: "凯美瑞 2023款 2.5L 豪华版",
+    //   titleEn: "Camry 2023 2.5L Luxury Edition",
+    //   guidePrice: 23.98,
+    //   discountAmount: 2.5,
+    //   exportMethod: "整船出口",
+    //   exportPrice: 21.48,
+    //   color: "珍珠白",
+    //   deliveryType: "现车",
+    //   deliveryCity: "上海",
+    //   insuranceType: "全险",
+    //   weChat: "https://example.com/images/wechat_qr.png",
+    //   contact: "张经理",
+    //   number: "13800138000"
+    // }
+  ]);
   const [dataSource, setDataSource] = useState<CarSource []>([]);
   const [items, setItems] = useState<ItemType[]>([
     {
