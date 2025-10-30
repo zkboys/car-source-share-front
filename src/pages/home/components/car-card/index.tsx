@@ -16,7 +16,7 @@ export type CarSource = {
   guidePrice: number;
   /** 优惠金额 */
   discountAmount: number;
-  /** TODO  出口方式 */
+  /** 出口方式 */
   exportMethod: string;
   /** 出口价 */
   exportPrice: number;
@@ -50,6 +50,7 @@ export function CarCard(props: CarSource) {
     insuranceType,
     number,
     contact,
+    weChat,
   } = props;
 
   return (
@@ -92,8 +93,10 @@ export function CarCard(props: CarSource) {
           Dialog.alert({
             content: (
               <div className={s.contactInfo}>
-                <div className={s.contact}>{contact}</div>
-                <div>微信：<a className={s.number} href={`tel:${number}`}>{number}</a></div>
+                <div>{contact}：<a className={s.number} href={`tel:${number}`}>{number}</a></div>
+                <div className={s.weChat}>
+                  <img src={weChat} alt="微信二维码"/>
+                </div>
               </div>
             ),
           })

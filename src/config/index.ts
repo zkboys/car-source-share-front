@@ -16,4 +16,6 @@ const envConfig = {
   [envEnum.PREVIEW]: configPreview,
 }[env];
 
+export const isDev = env === envEnum.DEVELOPMENT;
+
 export const CONFIG = merge({}, configDefault, envConfig) as Config;
