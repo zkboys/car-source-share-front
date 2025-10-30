@@ -12,7 +12,7 @@
     "build:preview": "tsc -b && cross-env VITE_RUN_ENV=preview vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "yarn build && cp -r build/* /root/nginx/html/car-source"
+    "deploy": "yarn build && cp -r build/* /var/www/car-source"
   },
   "dependencies": {
     "antd-mobile": "^5.41.1",
