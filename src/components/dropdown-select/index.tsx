@@ -32,7 +32,7 @@ export function DropdownSelect(props: DropdownSelectProps) {
             <div className={s.itemWrap}>
               {children?.map(it => {
                 const {key: k, title} = it;
-                const isAll = key === 'all';
+                const isAll = k === 'all';
                 const active = multiple ? values?.includes(k) : values === k;
                 return (
                   <div
@@ -43,18 +43,17 @@ export function DropdownSelect(props: DropdownSelectProps) {
                         if (isAll) {
                           value[key] = [k];
                         } else if (values?.includes(k)) {
+                          // 删除
                           if (typeof values !== "string") {
                             value[key] = values.filter((it: string) => it !== k);
                           }
                         } else {
+                          // 添加
                           if (typeof values !== "string") {
-                            value[key] = [...values.filter((it: string) => !children.find(i => i.key === it && i.key === 'all')), k];
+                            value[key] = [...values.filter((it: string) => it !== 'all'), k];
                           }
                         }
                         if (!value[key]?.length) value[key] = ['all'];
-                        if (value[key]?.length > 1) {
-                          value[key] = (value[key] as []).filter(it => it !== 'all');
-                        }
                       } else {
                         value[key] = k;
                       }
