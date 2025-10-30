@@ -6,7 +6,6 @@ type ItemType = {
   key: string;
   title: string;
   multiple?: boolean;
-  isAll?: boolean;
   children?: ItemType[];
 }
 export type DropdownSelectValue = Record<string, string | string[]>;
@@ -32,7 +31,8 @@ export function DropdownSelect(props: DropdownSelectProps) {
           <Dropdown.Item key={key} title={title}>
             <div className={s.itemWrap}>
               {children?.map(it => {
-                const {key: k, title, isAll} = it;
+                const {key: k, title} = it;
+                const isAll = key === 'all';
                 const active = multiple ? values?.includes(k) : values === k;
                 return (
                   <div
@@ -48,9 +48,10 @@ export function DropdownSelect(props: DropdownSelectProps) {
                           }
                         } else {
                           if (typeof values !== "string") {
-                            value[key] = [...values.filter((it: string) => !children.find(i => i.key === it && i.isAll)), k];
+                            value[key] = [...values.filter((it: string) => !children.find(i => i.key === it && i.key === 'all')), k];
                           }
                         }
+                        if (!value[key]?.length) value[key] = ['all'];
                       } else {
                         value[key] = k;
                       }

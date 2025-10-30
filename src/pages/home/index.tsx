@@ -14,7 +14,6 @@ type ItemType = {
   key: string,
   title: string,
   multiple?: boolean,
-  isAll?: boolean,
   children?: ItemType[],
 }
 
@@ -71,7 +70,7 @@ function Home() {
       title: '品牌',
       multiple: true,
       children: [
-        {key: 'all', title: '所有品牌', isAll: true},
+        {key: 'all', title: '所有品牌'},
       ],
     },
     {
@@ -79,7 +78,7 @@ function Home() {
       title: '车源',
       multiple: true,
       children: [
-        {key: 'all', title: '全国可提', isAll: true},
+        {key: 'all', title: '全国可提'},
       ],
     },
   ]);
@@ -124,12 +123,12 @@ function Home() {
         const sourceItems = items.find(it => it.key === 'source')!;
 
         brandItems.children = [
-          {key: 'all', title: '所有品牌', isAll: true},
+          {key: 'all', title: '所有品牌'},
           ...brand.map(b => ({key: b, title: b}))
         ];
 
         sourceItems.children = [
-          {key: 'all', title: '全国可提', isAll: true},
+          {key: 'all', title: '全国可提'},
           ...source.map(s => ({key: s, title: s}))
         ];
 
