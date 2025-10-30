@@ -3,7 +3,7 @@ import s from './index.module.less';
 import {config} from "@/config-hoc";
 import {PageContent, DropdownSelect} from "@/components";
 import {CarCard, type CarSource} from "./components";
-import {ErrorBlock} from "antd-mobile";
+import {ErrorBlock, Toast} from "antd-mobile";
 import axios from 'axios';
 
 type HomeProps = {
@@ -21,6 +21,7 @@ type DropdownValueType = {
   sorter: string,
   brand: string[],
   source: string[],
+  language: string,
 };
 
 export default config<HomeProps>({
@@ -34,6 +35,7 @@ function Home() {
     sorter: 'all',
     brand: ['all'],
     source: ['all'],
+    language: 'zh-CN',
   });
   const [originDataSource, setOriginDataSource] = useState<CarSource []>([]);
   const [dataSource, setDataSource] = useState<CarSource []>([]);
@@ -63,7 +65,26 @@ function Home() {
         {key: 'all', title: '全国可提'},
       ],
     },
+    {
+      key: 'language',
+      title: '中文',
+      children: [
+        {key: 'zh-CN', title: '🇨🇳 简体中文'},
+        {key: 'en-US', title: '🇬🇧 English'},
+      ],
+    },
   ]);
+
+  useEffect(() => {
+    if (dropdownValue.language === 'en-US') {
+      Toast.show({
+        content: '语言切换待上线...',
+      })
+      setDropdownValue(val => {
+        return {...val, language: 'zh-CN'}
+      })
+    }
+  }, [dropdownValue.language]);
 
   useEffect(() => {
     const {sorter, brand, source} = dropdownValue;
