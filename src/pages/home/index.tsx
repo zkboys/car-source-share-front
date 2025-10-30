@@ -107,8 +107,8 @@ function Home() {
         return 0;
       }
       if (sorter === 'desc') {
-        if (bPrice > aPrice) return -1;
-        if (bPrice < aPrice) return 1;
+        if (bPrice > aPrice) return 1;
+        if (bPrice < aPrice) return -1;
         return 0;
       }
       if (sorter === 'asc') {
