@@ -1,6 +1,7 @@
 import s from "./index.module.less";
 import wechatImg from './wechat.svg';
-import {Dialog, Ellipsis, Swiper} from "antd-mobile";
+import {Dialog, Ellipsis, Swiper, ImageViewer} from "antd-mobile";
+import {useRef, useState} from "react";
 
 export type CarSource = {
   id: string | number;
@@ -54,23 +55,51 @@ export function CarCard(props: CarSource) {
     contact,
     weChat,
   } = props;
+  const [visible, setVisible] = useState(false);
+  const [index, setIndex] = useState(0);
+  const imageViewerRef = useRef<any>(null);
 
   return (
     <div className={s.root}>
+      <ImageViewer.Multi
+        ref={imageViewerRef}
+        images={carPhoto}
+        visible={visible}
+        defaultIndex={index}
+        onIndexChange={index => setIndex(index)}
+        renderFooter={(_image: string, index: number) => {
+          return (
+            <div
+              className={s.imageViewerFooter}
+            >
+              {index + 1} / {carPhoto.length}
+            </div>
+          )
+        }}
+        onClose={() => {
+          setVisible(false)
+        }}
+      />
       <div className={s.top}>
-        {
-          carPhoto.length > 1 ? (
-            <Swiper>
-              {carPhoto.map(url => {
-                return (
-                  <Swiper.Item key={url}>
-                    <img src={url} alt={title} className={s.image}/>
-                  </Swiper.Item>
-                );
-              })}
-            </Swiper>
-          ) : <img src={carPhoto[0]} alt={title} className={s.image}/>
-        }
+        <Swiper
+          indicatorProps={{style: {display: carPhoto.length > 1 ? 'flex' : 'none'}}}
+        >
+          {carPhoto.map((url, index) => {
+            return (
+              <Swiper.Item key={url}>
+                <img
+                  src={url}
+                  alt={title}
+                  className={s.image}
+                  onClick={() => {
+                    imageViewerRef.current.swipeTo(index);
+                    setVisible(true);
+                  }}
+                />
+              </Swiper.Item>
+            );
+          })}
+        </Swiper>
         <div className={s.titleWrap}>
           <div className={s.title}>
             <Ellipsis direction="end" rows={3} content={title || ''}/>
