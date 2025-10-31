@@ -61,7 +61,7 @@ export function CarCard(props: CarSource) {
         <img src={carPhoto} alt={title} className={s.image}/>
         <div className={s.titleWrap}>
           <div className={s.title}>
-            <Ellipsis direction="end" rows={2} content={title || ''}/>
+            <Ellipsis direction="end" rows={3} content={title || ''}/>
           </div>
         </div>
       </div>
