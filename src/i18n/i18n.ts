@@ -1,7 +1,7 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import locale from './locales';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import locale from "./locales";
 
 // 系统可用语言列表
 export const localeOptions = locale;
@@ -27,7 +27,7 @@ if (!i18n.isInitialized) {
       //   zh: { translation: zh },
       // },
       // 默认语言
-      fallbackLng: 'zh-CN',
+      fallbackLng: "zh-CN",
       debug: true,
 
       interpolation: {
@@ -37,9 +37,9 @@ if (!i18n.isInitialized) {
 
       detection: {
         // 配置语言检测策略
-        order: ['localStorage', 'cookie', 'navigator'],
+        order: ["localStorage", "cookie", "navigator"],
         // 用户手动切换语言后会被存储
-        caches: ['localStorage', 'cookie'],
+        caches: ["localStorage", "cookie"],
       },
     })
     .then();
@@ -57,8 +57,12 @@ export function t(key: string, options?: any): string {
 export const language = i18n.language;
 
 // 切换语言
-export async function changeLanguage(lng: string) {
-  return i18n.changeLanguage(lng);
+export function changeLanguage(lng: string) {
+  i18n.changeLanguage(lng);
+
+  if (lng !== language) {
+    window.location.reload();
+  }
 }
 
 /**
