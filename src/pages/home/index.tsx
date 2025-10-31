@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, CSSProperties } from 'react';
 import s from './index.module.less';
 import { config } from "@/config-hoc";
 import { PageContent, DropdownSelect, DropdownSelectItemType } from "@/components";
@@ -7,6 +7,7 @@ import { ErrorBlock } from "antd-mobile";
 import axios from 'axios';
 import { extractNumber } from "@/commons";
 import { localeOptions, language, changeLanguage, t } from '@/i18n';
+import { useFunction } from '@/hooks';
 
 type HomeProps = {
   title: string;
@@ -37,7 +38,7 @@ function Home() {
   const [items, setItems] = useState<DropdownSelectItemType[]>([
     {
       key: 'sorter',
-      title: t('home.defaultSort'),
+      title: t('home.sort'),
       children: [
         { key: 'all', title: t('home.defaultSort') },
         { key: 'desc', title: t('home.exportPriceHighest') },
@@ -62,8 +63,7 @@ function Home() {
     },
     {
       key: 'language',
-      title: '🇨🇳 简体中文',
-      labelAsTitle: true,
+      title: t('home.language'),
       children: localeOptions.map(item => ({ key: item.value, title: item.label })),
     },
   ]);
@@ -120,7 +120,7 @@ function Home() {
             item.carPhoto = carPhoto.split(' ');
           }
         });
-        console.log(originDataSource.reduce((prev, curr) => (curr.carPhoto?.length || 0) + prev , 0));
+        console.log(originDataSource.reduce((prev, curr) => (curr.carPhoto?.length || 0) + prev, 0));
         setOriginDataSource(originDataSource);
 
         setItems((items: DropdownSelectItemType[]) => {
@@ -157,6 +157,24 @@ function Home() {
     })()
   }, []);
 
+  const rowRenderer = useFunction(({
+    index,
+    key,
+    style,
+  }: {
+    index: number
+    key: string
+    style: CSSProperties
+  }) => {
+    const item = dataSource[index];
+
+    return (
+      <div key={key} style={style}>
+        <CarCard {...item} />
+      </div>
+    );
+  });
+
   return (
     <PageContent className={s.root} loading={loading}>
       <div className={s.top}>
@@ -176,11 +194,7 @@ function Home() {
             title="暂无数据"
           />
         )
-          : dataSource.map((item: CarSource) => {
-            const { id } = item;
-
-            return <CarCard key={id} {...item} />;
-          })}
+          : dataSource.map((_item, index) => rowRenderer({ index, key: `${index}`, style: {} }))}
       </div>
     </PageContent>
   )

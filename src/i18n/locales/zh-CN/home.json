@@ -1,5 +1,6 @@
 {
   "home.title": "卡泰驰汽车出口",
+  "home.sort": "排序",
   "home.defaultSort": "默认排序",
   "home.exportPriceHighest": "出口价格最高",
   "home.exportPriceLowest": "出口价格最低",
@@ -15,5 +16,6 @@
   "home.addWeChat": "加微信",
   "home.weChat": "微信",
   "home.weChatQrCode": "微信二维码",
-  "iKnow": "我知道了"
+  "home.iKnow": "我知道了",
+  "home.language": "语言"
 }

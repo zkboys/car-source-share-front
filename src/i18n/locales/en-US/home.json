@@ -1,19 +1,21 @@
 {
-  "home.title": "CAR tech",
+  "home.title": "Cartech Automotive Export",
+  "home.sort": "Sort",
   "home.defaultSort": "Default Sort",
   "home.exportPriceHighest": "Price Highest",
   "home.exportPriceLowest": "Price Lowest",
   "home.brand": "Brand",
   "home.allBrand": "All Brands",
-  "home.carSource": "Car Source",
+  "home.carSource": "Source",
   "home.allCarSource": "All Countries",
-  "home.guidancePrice": "Guidance",
+  "home.guidancePrice": "Guide price",
   "home.discountAmount": "Discount",
-  "home.exportMethod": "Method",
-  "home.exportPrice": "Export Price",
+  "home.exportMethod": "Trade mode",
+  "home.exportPrice": "Trade prices",
   "home.noPhoto": "No Photo",
-  "home.addWeChat": "Add weChat",
+  "home.addWeChat": "WeChat",
   "home.weChat": "WeChat",
   "home.weChatQrCode": "WeChat QR Code",
-  "home.iKnow": "I Know"
+  "home.iKnow": "I Know",
+  "home.language": "Language"
 }
