@@ -59,7 +59,6 @@ export function DropdownSelect(props: DropdownSelectProps) {
                       } else {
                         value[key] = k;
                       }
-                      console.log(value);
                       onChange?.({ ...value });
                     }}
                   >

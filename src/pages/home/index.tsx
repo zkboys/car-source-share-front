@@ -122,7 +122,6 @@ function Home() {
             item.carPhoto = carPhoto.split(' ');
           }
         });
-        console.log(originDataSource.reduce((prev, curr) => (curr.carPhoto?.length || 0) + prev, 0));
         setOriginDataSource(originDataSource);
 
         setItems((items: DropdownSelectItemType[]) => {
