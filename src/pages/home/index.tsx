@@ -5,9 +5,11 @@ import { PageContent, DropdownSelect, DropdownSelectItemType } from "@/component
 import { CarCard, type CarSource, Header } from "./components";
 import { ErrorBlock } from "antd-mobile";
 import axios from 'axios';
-import { extractNumber } from "@/commons";
+import { extractNumber, getPxByVw } from "@/commons";
 import { localeOptions, language, changeLanguage, t } from '@/i18n';
 import { useFunction } from '@/hooks';
+import { List as VirtualizedList, AutoSizer, WindowScroller } from 'react-virtualized'
+
 
 type HomeProps = {
   title: string;
@@ -194,7 +196,33 @@ function Home() {
             title="暂无数据"
           />
         )
-          : dataSource.map((_item, index) => rowRenderer({ index, key: `${index}`, style: {} }))}
+          // : dataSource.map((_item, index) => rowRenderer({ index, key: `${index}`, style: {} }))
+          : (
+            /* @ts-ignore */
+            <WindowScroller>
+              {({ height, isScrolling, onChildScroll, scrollTop }) => (
+                /* @ts-ignore */
+                <AutoSizer disableHeight>
+                  {({ width }) => (
+                    /* @ts-ignore */
+                    <VirtualizedList
+                      autoHeight
+                      height={height}
+                      isScrolling={isScrolling}
+                      onScroll={onChildScroll}
+                      scrollTop={scrollTop}
+                      rowCount={dataSource.length}
+                      rowRenderer={rowRenderer}
+                      width={width}
+                      rowHeight={getPxByVw(216)}
+                      overscanRowCount={2}
+                    />
+                  )}
+                </AutoSizer>
+              )}
+            </WindowScroller>
+          )
+        }
       </div>
     </PageContent>
   )
