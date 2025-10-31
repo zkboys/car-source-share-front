@@ -1,11 +1,11 @@
 import s from "./index.module.less";
 import wechatImg from './wechat.svg';
-import {Dialog, Ellipsis} from "antd-mobile";
+import {Dialog, Ellipsis, Swiper} from "antd-mobile";
 
 export type CarSource = {
   id: string | number;
   /** 图片 */
-  carPhoto: string;
+  carPhoto: string[];
   /** 品牌 */
   brand: string;
   /** 名称 */
@@ -58,7 +58,19 @@ export function CarCard(props: CarSource) {
   return (
     <div className={s.root}>
       <div className={s.top}>
-        <img src={carPhoto} alt={title} className={s.image}/>
+        {
+          carPhoto.length > 1 ? (
+            <Swiper>
+              {carPhoto.map(url => {
+                return (
+                  <Swiper.Item key={url}>
+                    <img src={url} alt={title} className={s.image}/>
+                  </Swiper.Item>
+                );
+              })}
+            </Swiper>
+          ) : <img src={carPhoto[0]} alt={title} className={s.image}/>
+        }
         <div className={s.titleWrap}>
           <div className={s.title}>
             <Ellipsis direction="end" rows={3} content={title || ''}/>
@@ -84,10 +96,18 @@ export function CarCard(props: CarSource) {
         </div>
       </div>
       <div className={s.details}>
-        <span className={s.detailItem}>{color}</span>
-        <span className={s.detailItem}>{deliveryType}</span>
-        <span className={s.detailItem}>{deliveryCity}</span>
-        <span className={s.detailItem}>{insuranceType}</span>
+        <span className={s.detailItem}>
+          <span>{color}</span>
+        </span>
+        <span className={s.detailItem}>
+          <span>{deliveryType}</span>
+        </span>
+        <span className={s.detailItem}>
+          <span>{deliveryCity}</span>
+        </span>
+        <span className={s.detailItem}>
+          <span>{insuranceType}</span>
+        </span>
       </div>
       <div
         className={s.contactWrap}

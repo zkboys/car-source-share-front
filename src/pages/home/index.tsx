@@ -127,14 +127,21 @@ function Home() {
       try {
         setLoading(true);
         const res = await axios.get('/data/car-source.json');
-        const dataSource = Array.isArray(res.data) ? res.data : [];
-        setOriginDataSource(dataSource);
+        const originDataSource = Array.isArray(res.data) ? res.data : [];
+        originDataSource.forEach(item => {
+          const {carPhoto} = item;
+
+          if (typeof carPhoto === 'string') {
+            item.carPhoto = carPhoto.split(' ');
+          }
+        });
+        setOriginDataSource(originDataSource);
 
         setItems((items: ItemType[]) => {
           const brand: string[] = [];
           const source: string[] = [];
 
-          dataSource.forEach((item) => {
+          originDataSource.forEach((item) => {
             if (item.brand && !brand.includes(item.brand)) {
               brand.push(item.brand);
             }
