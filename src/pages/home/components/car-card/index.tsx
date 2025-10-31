@@ -64,6 +64,7 @@ export function CarCard(props: CarSource) {
     <div className={s.root}>
       <ImageViewer.Multi
         ref={imageViewerRef}
+        getContainer={() => document.body}
         images={carPhoto}
         visible={visible}
         defaultIndex={index}
