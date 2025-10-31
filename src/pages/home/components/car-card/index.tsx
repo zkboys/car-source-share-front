@@ -1,7 +1,7 @@
 import s from "./index.module.less";
 import wechatImg from './wechat.svg';
-import {Dialog, Ellipsis, Swiper, ImageViewer} from "antd-mobile";
-import {useRef, useState} from "react";
+import { Dialog, Ellipsis, Swiper, ImageViewer } from "antd-mobile";
+import { useRef, useState } from "react";
 
 export type CarSource = {
   id: string | number;
@@ -81,28 +81,34 @@ export function CarCard(props: CarSource) {
         }}
       />
       <div className={s.top}>
-        <Swiper
-          indicatorProps={{style: {display: carPhoto.length > 1 ? 'flex' : 'none'}}}
-        >
-          {carPhoto.map((url, index) => {
-            return (
-              <Swiper.Item key={url}>
-                <img
-                  src={url}
-                  alt={title}
-                  className={s.image}
-                  onClick={() => {
-                    imageViewerRef.current.swipeTo(index);
-                    setVisible(true);
-                  }}
-                />
-              </Swiper.Item>
-            );
-          })}
-        </Swiper>
+        <div className={s.imageWrap}>
+          <Swiper
+            indicator={(total, current) => (
+              <div className={s.indicator}>
+                {current + 1} / {total}
+              </div>
+            )}
+          >
+            {carPhoto.map((url, index) => {
+              return (
+                <Swiper.Item key={url}>
+                  <img
+                    src={url}
+                    alt={title}
+                    className={s.image}
+                    onClick={() => {
+                      imageViewerRef.current.swipeTo(index);
+                      setVisible(true);
+                    }}
+                  />
+                </Swiper.Item>
+              );
+            })}
+          </Swiper>
+        </div>
         <div className={s.titleWrap}>
           <div className={s.title}>
-            <Ellipsis direction="end" rows={3} content={title || ''}/>
+            <Ellipsis direction="end" rows={3} content={title || ''} />
           </div>
         </div>
       </div>
@@ -147,14 +153,14 @@ export function CarCard(props: CarSource) {
               <div className={s.contactInfo}>
                 <div>{contact}：<a className={s.number} href={`tel:${number}`}>{number}</a></div>
                 <div className={s.weChat}>
-                  <img src={weChat} alt="微信二维码"/>
+                  <img src={weChat} alt="微信二维码" />
                 </div>
               </div>
             ),
           })
         }
       >
-        <img className={s.wechatIcon} src={wechatImg} alt="微信"/>
+        <img className={s.wechatIcon} src={wechatImg} alt="微信" />
         <span className={s.contactText}>加微信</span>
       </div>
     </div>

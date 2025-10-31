@@ -11,14 +11,26 @@
 .top {
   display: flex;
   padding: 8px;
-
-  .image {
+  .indicator {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 12px;
+  }
+  .imageWrap {
     flex: 0 0 106px;
     width: 106px;
     height: 80px;
+    margin-right: 8px;
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 8px;
-    margin-right: 8px;
   }
 
   .titleWrap {
@@ -66,7 +78,7 @@
   .value {
     font-size: 14px;
     font-weight: 500;
-    color: #FA6400;
+    color: #fa6400;
   }
 }
 
