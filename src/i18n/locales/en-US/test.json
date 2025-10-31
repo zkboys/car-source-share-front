@@ -1,0 +1,7 @@
+{
+  "test.arrayVar": "Test Array Var {{0}} {{1}}",
+  "test.objectVar": "Test Object Var {{name}}",
+  "test.nestObjectVar": "Test nest Object Var {{user.name}}",
+  "test.intlNumber": "Some {{val, number}}",
+  "test.intlNumberWithOptions": "Some {{val, number(minimumFractionDigits: 2)}}"
+}

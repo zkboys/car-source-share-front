@@ -1,21 +1,15 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import s from './index.module.less';
-import {config} from "@/config-hoc";
-import {PageContent, DropdownSelect} from "@/components";
-import {CarCard, type CarSource, Header} from "./components";
-import {ErrorBlock, Toast} from "antd-mobile";
+import { config } from "@/config-hoc";
+import { PageContent, DropdownSelect, DropdownSelectItemType } from "@/components";
+import { CarCard, type CarSource, Header } from "./components";
+import { ErrorBlock } from "antd-mobile";
 import axios from 'axios';
-import {extractNumber} from "@/commons";
+import { extractNumber } from "@/commons";
+import { localeOptions, language, changeLanguage } from '@/i18n';
 
 type HomeProps = {
   title: string;
-}
-
-type ItemType = {
-  key: string,
-  title: string,
-  multiple?: boolean,
-  children?: ItemType[],
 }
 
 type DropdownValueType = {
@@ -36,18 +30,18 @@ function Home() {
     sorter: 'all',
     brand: ['all'],
     source: ['all'],
-    language: 'zh-CN',
+    language: language,
   });
-  const [originDataSource, setOriginDataSource] = useState<CarSource []>([]);
-  const [dataSource, setDataSource] = useState<CarSource []>([]);
-  const [items, setItems] = useState<ItemType[]>([
+  const [originDataSource, setOriginDataSource] = useState<CarSource[]>([]);
+  const [dataSource, setDataSource] = useState<CarSource[]>([]);
+  const [items, setItems] = useState<DropdownSelectItemType[]>([
     {
       key: 'sorter',
       title: '默认排序',
       children: [
-        {key: 'all', title: '默认排序'},
-        {key: 'desc', title: '出口价格最高'},
-        {key: 'asc', title: '出口价格最低'},
+        { key: 'all', title: '默认排序' },
+        { key: 'desc', title: '出口价格最高' },
+        { key: 'asc', title: '出口价格最低' },
       ],
     },
     {
@@ -55,7 +49,7 @@ function Home() {
       title: '品牌',
       multiple: true,
       children: [
-        {key: 'all', title: '所有品牌'},
+        { key: 'all', title: '所有品牌' },
       ],
     },
     {
@@ -63,32 +57,24 @@ function Home() {
       title: '车源',
       multiple: true,
       children: [
-        {key: 'all', title: '全国可提'},
+        { key: 'all', title: '全国可提' },
       ],
     },
     {
       key: 'language',
-      title: '中文',
-      children: [
-        {key: 'zh-CN', title: '🇨🇳 简体中文'},
-        {key: 'en-US', title: '🇬🇧 English'},
-      ],
+      title: '🇨🇳 简体中文',
+      labelAsTitle: true,
+      children: localeOptions.map(item => ({ key: item.value, title: item.label })),
     },
   ]);
 
   useEffect(() => {
-    if (dropdownValue.language === 'en-US') {
-      Toast.show({
-        content: '语言切换待上线...',
-      })
-      setDropdownValue(val => {
-        return {...val, language: 'zh-CN'}
-      })
-    }
+    changeLanguage(dropdownValue.language);
+    
   }, [dropdownValue.language]);
 
   useEffect(() => {
-    const {sorter, brand, source} = dropdownValue;
+    const { sorter, brand, source } = dropdownValue;
     const nextDataSource = originDataSource.filter((item: CarSource) => {
       const isBrand = brand.includes('all') ? true : brand.some((key: string) => item.brand === key);
       const isSource = source.includes('all') ? true : source.some((key: string) => item.deliveryCity === key);
@@ -129,7 +115,7 @@ function Home() {
         const res = await axios.get('/data/car-source.json');
         const originDataSource = Array.isArray(res.data) ? res.data : [];
         originDataSource.forEach(item => {
-          const {carPhoto} = item;
+          const { carPhoto } = item;
 
           if (typeof carPhoto === 'string') {
             item.carPhoto = carPhoto.split(' ');
@@ -137,7 +123,7 @@ function Home() {
         });
         setOriginDataSource(originDataSource);
 
-        setItems((items: ItemType[]) => {
+        setItems((items: DropdownSelectItemType[]) => {
           const brand: string[] = [];
           const source: string[] = [];
 
@@ -154,13 +140,13 @@ function Home() {
           const sourceItems = items.find(it => it.key === 'source')!;
 
           brandItems.children = [
-            {key: 'all', title: '所有品牌'},
-            ...brand.map(b => ({key: b, title: b}))
+            { key: 'all', title: '所有品牌' },
+            ...brand.map(b => ({ key: b, title: b }))
           ];
 
           sourceItems.children = [
-            {key: 'all', title: '全国可提'},
-            ...source.map(s => ({key: s, title: s}))
+            { key: 'all', title: '全国可提' },
+            ...source.map(s => ({ key: s, title: s }))
           ];
 
           return [...items];
@@ -174,7 +160,7 @@ function Home() {
   return (
     <PageContent className={s.root} loading={loading}>
       <div className={s.top}>
-        <Header/>
+        <Header />
         <DropdownSelect
           value={dropdownValue}
           onChange={(value) => setDropdownValue(value as DropdownValueType)}
@@ -183,15 +169,15 @@ function Home() {
       </div>
       <div className={s.content}>
         {!dataSource?.length ? (
-            <ErrorBlock
-              className={s.empty}
-              status="empty"
-              description="更换筛选条件试试"
-              title="暂无数据"
-            />
-          )
+          <ErrorBlock
+            className={s.empty}
+            status="empty"
+            description="更换筛选条件试试"
+            title="暂无数据"
+          />
+        )
           : dataSource.map((item: CarSource) => {
-            const {id} = item;
+            const { id } = item;
 
             return <CarCard key={id} {...item} />;
           })}

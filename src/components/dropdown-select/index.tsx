@@ -1,37 +1,39 @@
-import {Dropdown} from 'antd-mobile'
+import { Dropdown } from 'antd-mobile'
 import s from './index.module.less'
 import c from 'classnames'
 
-type ItemType = {
+export type DropdownSelectItemType = {
   key: string;
   title: string;
   multiple?: boolean;
-  children?: ItemType[];
+  labelAsTitle?: boolean;
+  children?: DropdownSelectItemType[];
 }
 export type DropdownSelectValue = Record<string, string | string[]>;
 export type DropdownSelectProps = {
   className?: string;
-  items: ItemType[];
+  items: DropdownSelectItemType[];
   value?: DropdownSelectValue;
   onChange?: (value: DropdownSelectValue) => void;
 }
 
 export function DropdownSelect(props: DropdownSelectProps) {
-  const {className, items, onChange} = props;
-  let {value} = props;
+  const { className, items, onChange } = props;
+  let { value } = props;
   if (!value) value = {}
 
   return <div className={c(s.root, className)}>
     <Dropdown>
       {items.map(item => {
-        const {key, title, children, multiple} = item;
+        const { key, title, children, multiple, labelAsTitle } = item;
         const values = value?.[key] || [];
+        const label = children?.find(it => it.key === values)?.title
 
         return (
-          <Dropdown.Item key={key} title={title}>
+          <Dropdown.Item key={key} title={labelAsTitle ? label : title}>
             <div className={s.itemWrap}>
               {children?.map(it => {
-                const {key: k, title} = it;
+                const { key: k, title } = it;
                 const isAll = k === 'all';
                 const active = multiple ? values?.includes(k) : values === k;
                 return (
@@ -58,7 +60,7 @@ export function DropdownSelect(props: DropdownSelectProps) {
                         value[key] = k;
                       }
                       console.log(value);
-                      onChange?.({...value});
+                      onChange?.({ ...value });
                     }}
                   >
                     {title}

@@ -72,7 +72,7 @@ export function CarCard(props: CarSource) {
             <div
               className={s.imageViewerFooter}
             >
-              {index + 1} / {carPhoto.length}
+              {index + 1} / {carPhoto?.length}
             </div>
           )
         }}
@@ -82,29 +82,31 @@ export function CarCard(props: CarSource) {
       />
       <div className={s.top}>
         <div className={s.imageWrap}>
-          <Swiper
-            indicator={(total, current) => (
-              <div className={s.indicator}>
-                {current + 1} / {total}
-              </div>
-            )}
-          >
-            {carPhoto.map((url, index) => {
-              return (
-                <Swiper.Item key={url}>
-                  <img
-                    src={url}
-                    alt={title}
-                    className={s.image}
-                    onClick={() => {
-                      imageViewerRef.current.swipeTo(index);
-                      setVisible(true);
-                    }}
-                  />
-                </Swiper.Item>
-              );
-            })}
-          </Swiper>
+          {carPhoto?.length ? (
+            <Swiper
+              indicator={(total, current) => (
+                <div className={s.indicator}>
+                  {current + 1} / {total}
+                </div>
+              )}
+            >
+              {carPhoto?.map((url, index) => {
+                return (
+                  <Swiper.Item key={url}>
+                    <img
+                      src={url}
+                      alt={title}
+                      className={s.image}
+                      onClick={() => {
+                        imageViewerRef.current.swipeTo(index);
+                        setVisible(true);
+                      }}
+                    />
+                  </Swiper.Item>
+                );
+              })}
+            </Swiper>
+          ) : <div className={s.noPhoto}>暂无图片</div>}
         </div>
         <div className={s.titleWrap}>
           <div className={s.title}>
