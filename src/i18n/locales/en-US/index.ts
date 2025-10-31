@@ -1,4 +1,4 @@
-const localeModules = import.meta.glob("./**/*.json", { eager: true });
+const localeModules: any = import.meta.glob("./**/*.json", { eager: true });
 
 export default Object.keys(localeModules).reduce((prev, key) => {
   const items = localeModules[key].default || localeModules[key];
