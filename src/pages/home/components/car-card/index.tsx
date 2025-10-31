@@ -1,12 +1,13 @@
 import s from "./index.module.less";
-import wechatImg from './wechat.svg';
+import weChatImg from './wechat.svg';
 import { Dialog, Ellipsis, Swiper, ImageViewer } from "antd-mobile";
 import { useRef, useState } from "react";
+import {t} from "@/i18n";
 
 export type CarSource = {
   id: string | number;
   /** 图片 */
-  carPhoto: string[];
+  carPhoto?: string[];
   /** 品牌 */
   brand: string;
   /** 名称 */
@@ -106,7 +107,7 @@ export function CarCard(props: CarSource) {
                 );
               })}
             </Swiper>
-          ) : <div className={s.noPhoto}>暂无图片</div>}
+          ) : <div className={s.noPhoto}>{t('home.noPhoto')}</div>}
         </div>
         <div className={s.titleWrap}>
           <div className={s.title}>
@@ -116,19 +117,19 @@ export function CarCard(props: CarSource) {
       </div>
       <div className={s.priceInfo}>
         <div className={s.priceItem}>
-          <span className={s.label}>指导价</span>
+          <span className={s.label}>{t('home.guidancePrice')}</span>
           <span className={s.value}>{guidePrice}</span>
         </div>
         <div className={s.priceItem}>
-          <span className={s.label}>优惠金额</span>
+          <span className={s.label}>{t('home.discountAmount')}</span>
           <span className={s.value}>{discountAmount}</span>
         </div>
         <div className={s.priceItem}>
-          <span className={s.label}>出口方式</span>
+          <span className={s.label}>{t('home.exportMethod')}</span>
           <span className={s.value}>{exportMethod}</span>
         </div>
         <div className={s.priceItem}>
-          <span className={s.label}>出口价</span>
+          <span className={s.label}>{t('home.exportPrice')}</span>
           <span className={s.value}>{exportPrice}</span>
         </div>
       </div>
@@ -155,15 +156,15 @@ export function CarCard(props: CarSource) {
               <div className={s.contactInfo}>
                 <div>{contact}：<a className={s.number} href={`tel:${number}`}>{number}</a></div>
                 <div className={s.weChat}>
-                  <img src={weChat} alt="微信二维码" />
+                  <img src={weChat} alt={t('home.weChatQrCode')} />
                 </div>
               </div>
             ),
           })
         }
       >
-        <img className={s.wechatIcon} src={wechatImg} alt="微信" />
-        <span className={s.contactText}>加微信</span>
+        <img className={s.weChatIcon} src={weChatImg} alt={t('home.weChat')} />
+        <span className={s.contactText}>{t('home.addWeChat')}</span>
       </div>
     </div>
   );

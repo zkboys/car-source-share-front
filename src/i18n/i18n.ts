@@ -48,7 +48,7 @@ if (!i18n.isInitialized) {
 // 做次包装，业务代码中不直接使用 i18n，方便后续统一拦截、扩展
 
 // 翻译函数
-export function t(key: string, options?: any) {
+export function t(key: string, options?: any): string {
   // @ts-ignore
   return i18n.t(key, options);
 }

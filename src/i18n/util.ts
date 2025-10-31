@@ -10,16 +10,18 @@ import { language } from "./index";
 export function getLocales() {
   // 英文
   if (language.startsWith("en")) {
-    import("dayjs/locale/en");
-    dayjs.locale("en");
+    import("dayjs/locale/en").then(() => {
+      dayjs.locale("en");
+    });
     return {
       antLocale: ant_en_US,
     };
   }
 
   // 默认中文
-  import("dayjs/locale/zh-cn");
-  dayjs.locale("zh-cn");
+  import("dayjs/locale/zh-cn").then(() => {
+    dayjs.locale("zh-cn");
+  });
   return {
     antLocale: ant_zh_CN,
   };

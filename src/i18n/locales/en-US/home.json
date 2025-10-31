@@ -1,0 +1,18 @@
+{
+  "home.title": "CAR tech",
+  "home.defaultSort": "Default Sort",
+  "home.exportPriceHighest": "Price Highest",
+  "home.exportPriceLowest": "Price Lowest",
+  "home.brand": "Brand",
+  "home.allBrand": "All Brands",
+  "home.carSource": "Car Source",
+  "home.allCarSource": "All Countries",
+  "home.guidancePrice": "Guidance",
+  "home.discountAmount": "Discount",
+  "home.exportMethod": "Method",
+  "home.exportPrice": "Export Price",
+  "home.noPhoto": "No Photo",
+  "home.addWeChat": "Add weChat",
+  "home.weChat": "WeChat",
+  "home.weChatQrCode": "WeChat QR Code"
+}

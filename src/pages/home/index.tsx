@@ -6,7 +6,7 @@ import { CarCard, type CarSource, Header } from "./components";
 import { ErrorBlock } from "antd-mobile";
 import axios from 'axios';
 import { extractNumber } from "@/commons";
-import { localeOptions, language, changeLanguage } from '@/i18n';
+import { localeOptions, language, changeLanguage, t } from '@/i18n';
 
 type HomeProps = {
   title: string;
@@ -20,7 +20,7 @@ type DropdownValueType = {
 };
 
 export default config<HomeProps>({
-  title: '卡泰驰汽车出口',
+  title: t('home.title'),
 })(Home);
 
 // Home必须单独定义，否则会影响 hot updated
@@ -37,27 +37,27 @@ function Home() {
   const [items, setItems] = useState<DropdownSelectItemType[]>([
     {
       key: 'sorter',
-      title: '默认排序',
+      title: t('home.defaultSort'),
       children: [
-        { key: 'all', title: '默认排序' },
-        { key: 'desc', title: '出口价格最高' },
-        { key: 'asc', title: '出口价格最低' },
+        { key: 'all', title: t('home.defaultSort') },
+        { key: 'desc', title: t('home.exportPriceHighest') },
+        { key: 'asc', title: t('home.exportPriceLowest') },
       ],
     },
     {
       key: 'brand',
-      title: '品牌',
+      title: t('home.brand'),
       multiple: true,
       children: [
-        { key: 'all', title: '所有品牌' },
+        { key: 'all', title: t('home.allBrand') },
       ],
     },
     {
       key: 'source',
-      title: '车源',
+      title: t('home.carSource'),
       multiple: true,
       children: [
-        { key: 'all', title: '全国可提' },
+        { key: 'all', title: t('home.allCarSource') },
       ],
     },
     {
@@ -70,7 +70,7 @@ function Home() {
 
   useEffect(() => {
     changeLanguage(dropdownValue.language);
-    
+
   }, [dropdownValue.language]);
 
   useEffect(() => {
@@ -140,12 +140,12 @@ function Home() {
           const sourceItems = items.find(it => it.key === 'source')!;
 
           brandItems.children = [
-            { key: 'all', title: '所有品牌' },
+            { key: 'all', title: t('home.allBrand') },
             ...brand.map(b => ({ key: b, title: b }))
           ];
 
           sourceItems.children = [
-            { key: 'all', title: '全国可提' },
+            { key: 'all', title: t('home.allCarSource') },
             ...source.map(s => ({ key: s, title: s }))
           ];
 

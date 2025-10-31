@@ -1,7 +1,0 @@
-{
-  "test.arrayVar": "测试数组变量 {{0}} {{1}}",
-  "test.objectVar": "测试对象变量 {{name}}",
-  "test.nestObjectVar": "测试层级对象变量 {{user.name}}",
-  "test.intlNumber": "某个数字 {{val, number}}",
-  "test.intlNumberWithOptions": "某个数字保留小数 {{val, number(minimumFractionDigits: 2)}}"
-}
