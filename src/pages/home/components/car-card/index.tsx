@@ -93,6 +93,7 @@ export function CarCard(props: CarSource) {
         className={s.contactWrap}
         onClick={() =>
           Dialog.alert({
+            className: s.weChatDialog,
             content: (
               <div className={s.contactInfo}>
                 <div>{contact}：<a className={s.number} href={`tel:${number}`}>{number}</a></div>
