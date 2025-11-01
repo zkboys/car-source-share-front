@@ -1,7 +1,6 @@
 import s from "./index.module.less";
 import weChatImg from './wechat.svg';
-import { Dialog, Ellipsis, Swiper, ImageViewer } from "antd-mobile";
-import { useRef, useState } from "react";
+import {Dialog, Ellipsis, Swiper} from "antd-mobile";
 import {t} from "@/i18n";
 
 export type CarSource = {
@@ -40,7 +39,16 @@ export type CarSource = {
   createTime: string;
 };
 
-export function CarCard(props: CarSource) {
+export type CarCardProps = {
+  data: CarSource;
+  onImageClick: (images: string[], index: number) => void;
+}
+
+export function CarCard(props: CarCardProps) {
+  const {
+    data,
+    onImageClick,
+  } = props;
   const {
     carPhoto,
     title,
@@ -55,33 +63,10 @@ export function CarCard(props: CarSource) {
     number,
     contact,
     weChat,
-  } = props;
-  const [visible, setVisible] = useState(false);
-  const [index, setIndex] = useState(0);
-  const imageViewerRef = useRef<any>(null);
+  } = data || {};
 
   return (
     <div className={s.root}>
-      <ImageViewer.Multi
-        ref={imageViewerRef}
-        getContainer={() => document.body}
-        images={carPhoto}
-        visible={visible}
-        defaultIndex={index}
-        onIndexChange={index => setIndex(index)}
-        renderFooter={(_image: string, index: number) => {
-          return (
-            <div
-              className={s.imageViewerFooter}
-            >
-              {index + 1} / {carPhoto?.length}
-            </div>
-          )
-        }}
-        onClose={() => {
-          setVisible(false)
-        }}
-      />
       <div className={s.top}>
         <div className={s.imageWrap}>
           {carPhoto?.length ? (
@@ -100,8 +85,7 @@ export function CarCard(props: CarSource) {
                       alt={title}
                       className={s.image}
                       onClick={() => {
-                        imageViewerRef.current.swipeTo(index);
-                        setVisible(true);
+                        onImageClick?.(carPhoto, index);
                       }}
                     />
                   </Swiper.Item>
@@ -112,7 +96,7 @@ export function CarCard(props: CarSource) {
         </div>
         <div className={s.titleWrap}>
           <div className={s.title}>
-            <Ellipsis direction="end" rows={3} content={title || ''} />
+            <Ellipsis direction="end" rows={3} content={title || ''}/>
           </div>
         </div>
       </div>
@@ -158,14 +142,14 @@ export function CarCard(props: CarSource) {
               <div className={s.contactInfo}>
                 <div>{contact}：<a className={s.number} href={`tel:${number}`}>{number}</a></div>
                 <div className={s.weChat}>
-                  <img src={weChat} alt={t('home.weChatQrCode')} />
+                  <img src={weChat} alt={t('home.weChatQrCode')}/>
                 </div>
               </div>
             ),
           })
         }
       >
-        <img className={s.weChatIcon} src={weChatImg} alt={t('home.weChat')} />
+        <img className={s.weChatIcon} src={weChatImg} alt={t('home.weChat')}/>
         <span className={s.contactText}>{t('home.addWeChat')}</span>
       </div>
     </div>

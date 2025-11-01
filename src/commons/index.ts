@@ -1,6 +1,6 @@
-import { match } from "path-to-regexp";
+import {match} from "path-to-regexp";
 import pagesConfig from "~pages-config";
-import type { ConfigOptions } from "@/config-hoc/types";
+import type {ConfigOptions} from "@/config-hoc/types";
 
 export type PageConfig = ConfigOptions & {
   filePath: string;
@@ -38,13 +38,16 @@ export function extractNumber(str: string): number {
 
   return 0;
 }
+
+const VIEWPORT_WIDTH = 375;
+
 /**
  * Convert px to vw based on viewport width
  * @param px - The pixel value to convert
  * @param viewportWidth - The viewport width in pixels (default: 375)
  * @returns The converted value in vw units as a string
  */
-export function pxToVw(px: number, viewportWidth: number = 375): string {
+export function pxToVw(px: number, viewportWidth: number = VIEWPORT_WIDTH): string {
   // Skip conversion for values <= minPixelValue (1 in config)
   if (Math.abs(px) <= 1) {
     return `${px}px`;
@@ -67,7 +70,7 @@ export function pxToVw(px: number, viewportWidth: number = 375): string {
  */
 export function vwToPx(
   vw: string | number,
-  viewportWidth: number = 375
+  viewportWidth: number = VIEWPORT_WIDTH
 ): string {
   // Extract numeric value from string (e.g., "5.333333vw" -> 5.333333)
   const vwValue =
@@ -81,6 +84,13 @@ export function vwToPx(
 
   return `${roundedPx}px`;
 }
-export function getPxByVw(oldPx: number, baseWidth: number = 375): number {
-  return (window.innerWidth / baseWidth) * oldPx;
+
+/**
+ * 基于窗口跨度，计算新的px尺寸
+ * - 一般用于jsx中
+ * @param oldPx
+ * @param viewportWidth
+ */
+export function px(oldPx: number, viewportWidth: number = VIEWPORT_WIDTH): number {
+  return (window.innerWidth / viewportWidth) * oldPx;
 }

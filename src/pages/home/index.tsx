@@ -1,14 +1,14 @@
-import { useState, useEffect, CSSProperties } from 'react';
+import {useState, useEffect, CSSProperties, useRef} from 'react';
 import s from './index.module.less';
-import { config } from "@/config-hoc";
-import { PageContent, DropdownSelect, DropdownSelectItemType } from "@/components";
-import { CarCard, type CarSource, Header } from "./components";
-import { ErrorBlock } from "antd-mobile";
+import {config} from "@/config-hoc";
+import {PageContent, DropdownSelect, DropdownSelectItemType} from "@/components";
+import {CarCard, type CarSource, Header} from "./components";
+import {ErrorBlock, ImageViewer} from "antd-mobile";
 import axios from 'axios';
-import { extractNumber, getPxByVw } from "@/commons";
-import { localeOptions, language, changeLanguage, t } from '@/i18n';
-import { useFunction } from '@/hooks';
-import { List as VirtualizedList, AutoSizer, WindowScroller } from 'react-virtualized'
+import {extractNumber, px} from "@/commons";
+import {localeOptions, language, changeLanguage, t} from '@/i18n';
+import {useFunction} from '@/hooks';
+import {List as VirtualizedList, AutoSizer, WindowScroller} from 'react-virtualized'
 
 
 type HomeProps = {
@@ -26,6 +26,39 @@ export default config<HomeProps>({
   title: t('home.title'),
 })(Home);
 
+const initItems = [
+  {
+    key: 'sorter',
+    title: t('home.sort'),
+    children: [
+      {key: 'all', title: t('home.defaultSort')},
+      {key: 'desc', title: t('home.exportPriceHighest')},
+      {key: 'asc', title: t('home.exportPriceLowest')},
+    ],
+  },
+  {
+    key: 'brand',
+    title: t('home.brand'),
+    multiple: true,
+    children: [
+      {key: 'all', title: t('home.allBrand')},
+    ],
+  },
+  {
+    key: 'source',
+    title: t('home.carSource'),
+    multiple: true,
+    children: [
+      {key: 'all', title: t('home.allCarSource')},
+    ],
+  },
+  {
+    key: 'language',
+    title: t('home.language'),
+    children: localeOptions.map(item => ({key: item.value, title: item.label})),
+  },
+];
+
 // Home必须单独定义，否则会影响 hot updated
 function Home() {
   const [loading, setLoading] = useState(false);
@@ -37,45 +70,18 @@ function Home() {
   });
   const [originDataSource, setOriginDataSource] = useState<CarSource[]>([]);
   const [dataSource, setDataSource] = useState<CarSource[]>([]);
-  const [items, setItems] = useState<DropdownSelectItemType[]>([
-    {
-      key: 'sorter',
-      title: t('home.sort'),
-      children: [
-        { key: 'all', title: t('home.defaultSort') },
-        { key: 'desc', title: t('home.exportPriceHighest') },
-        { key: 'asc', title: t('home.exportPriceLowest') },
-      ],
-    },
-    {
-      key: 'brand',
-      title: t('home.brand'),
-      multiple: true,
-      children: [
-        { key: 'all', title: t('home.allBrand') },
-      ],
-    },
-    {
-      key: 'source',
-      title: t('home.carSource'),
-      multiple: true,
-      children: [
-        { key: 'all', title: t('home.allCarSource') },
-      ],
-    },
-    {
-      key: 'language',
-      title: t('home.language'),
-      children: localeOptions.map(item => ({ key: item.value, title: item.label })),
-    },
-  ]);
+  const [items, setItems] = useState<DropdownSelectItemType[]>(initItems);
+  const [viewerVisible, setViewerVisible] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
+  const imageViewerRef = useRef<any>(null);
+  const [viewerImages, setViewerImages] = useState<string[]>([]);
 
   useEffect(() => {
     changeLanguage(dropdownValue.language);
   }, [dropdownValue.language]);
 
   useEffect(() => {
-    const { sorter, brand, source } = dropdownValue;
+    const {sorter, brand, source} = dropdownValue;
     const nextDataSource = originDataSource.filter((item: CarSource) => {
       const isBrand = brand.includes('all') ? true : brand.some((key: string) => item.brand === key);
       const isSource = source.includes('all') ? true : source.some((key: string) => item.deliveryCity === key);
@@ -116,7 +122,7 @@ function Home() {
         const res = await axios.get('/data/car-source.json');
         const originDataSource = Array.isArray(res.data) ? res.data : [];
         originDataSource.forEach(item => {
-          const { carPhoto } = item;
+          const {carPhoto} = item;
 
           if (typeof carPhoto === 'string') {
             item.carPhoto = carPhoto.split(' ');
@@ -141,13 +147,13 @@ function Home() {
           const sourceItems = items.find(it => it.key === 'source')!;
 
           brandItems.children = [
-            { key: 'all', title: t('home.allBrand') },
-            ...brand.map(b => ({ key: b, title: b }))
+            {key: 'all', title: t('home.allBrand')},
+            ...brand.map(b => ({key: b, title: b}))
           ];
 
           sourceItems.children = [
-            { key: 'all', title: t('home.allCarSource') },
-            ...source.map(s => ({ key: s, title: s }))
+            {key: 'all', title: t('home.allCarSource')},
+            ...source.map(s => ({key: s, title: s}))
           ];
 
           return [...items];
@@ -158,20 +164,24 @@ function Home() {
     })()
   }, []);
 
-  const rowRenderer = useFunction(({
-    index,
-    key,
-    style,
-  }: {
+  const rowRenderer = useFunction((options: {
     index: number
     key: string
     style: CSSProperties
   }) => {
+    const {index, key, style} = options;
     const item = dataSource[index];
 
     return (
       <div key={key} style={style}>
-        <CarCard {...item} />
+        <CarCard
+          data={item}
+          onImageClick={(images, index: number) => {
+            setViewerImages(images);
+            imageViewerRef.current.swipeTo(index);
+            setViewerVisible(true);
+          }}
+        />
       </div>
     );
   });
@@ -179,7 +189,7 @@ function Home() {
   return (
     <PageContent className={s.root} loading={loading}>
       <div className={s.top}>
-        <Header />
+        <Header/>
         <DropdownSelect
           value={dropdownValue}
           onChange={(value) => setDropdownValue(value as DropdownValueType)}
@@ -188,21 +198,21 @@ function Home() {
       </div>
       <div className={s.content}>
         {!dataSource?.length ? (
-          <ErrorBlock
-            className={s.empty}
-            status="empty"
-            description="更换筛选条件试试"
-            title="暂无数据"
-          />
-        )
+            <ErrorBlock
+              className={s.empty}
+              status="empty"
+              description="更换筛选条件试试"
+              title="暂无数据"
+            />
+          )
           // : dataSource.map((_item, index) => rowRenderer({ index, key: `${index}`, style: {} }))
           : (
             /* @ts-ignore */
             <WindowScroller>
-              {({ height, isScrolling, onChildScroll, scrollTop }) => (
+              {({height, isScrolling, onChildScroll, scrollTop}) => (
                 /* @ts-ignore */
                 <AutoSizer disableHeight>
-                  {({ width }) => (
+                  {({width}) => (
                     /* @ts-ignore */
                     <VirtualizedList
                       autoHeight
@@ -213,7 +223,7 @@ function Home() {
                       rowCount={dataSource.length}
                       rowRenderer={rowRenderer}
                       width={width}
-                      rowHeight={getPxByVw(216)}
+                      rowHeight={px(220)}
                       overscanRowCount={2}
                     />
                   )}
@@ -223,6 +233,15 @@ function Home() {
           )
         }
       </div>
+      <ImageViewer.Multi
+        ref={imageViewerRef}
+        getContainer={() => document.body}
+        images={viewerImages}
+        visible={viewerVisible}
+        defaultIndex={viewerIndex}
+        onIndexChange={index => setViewerIndex(index)}
+        onClose={() => setViewerVisible(false)}
+      />
     </PageContent>
   )
 }
