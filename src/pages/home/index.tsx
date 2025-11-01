@@ -1,4 +1,4 @@
-import {useState, useEffect, CSSProperties, useRef} from 'react';
+import {useState, useEffect, CSSProperties, useRef, useCallback} from 'react';
 import s from './index.module.less';
 import {config} from "@/config-hoc";
 import {PageContent, DropdownSelect, DropdownSelectItemType} from "@/components";
@@ -75,19 +75,63 @@ function Home() {
   const [viewerIndex, setViewerIndex] = useState(0);
   const imageViewerRef = useRef<any>(null);
   const [viewerImages, setViewerImages] = useState<string[]>([]);
+  const isEn = language === 'en-US';
 
+  const getValueByLanguage = useFunction((data: CarSource, field: string) => {
+    const _field = isEn ? `${field}En` : field;
+    // @ts-ignore
+    return data[_field] || data[field] || '';
+  });
+
+  // 获取顶层查询条件项
+  const getItems = useFunction((originDataSource: CarSource[]) => {
+    setItems((items: DropdownSelectItemType[]) => {
+      const brandList: string[] = [];
+      const sourceList: string[] = [];
+
+      originDataSource.forEach((item) => {
+        const {brand, deliveryCity} = item;
+        if (brand && !brandList.includes(brand)) {
+          brandList.push(brand);
+        }
+        if (deliveryCity && !sourceList.includes(deliveryCity)) {
+          sourceList.push(deliveryCity);
+        }
+      });
+
+      const brandItems = items.find(it => it.key === 'brand')!;
+      const sourceItems = items.find(it => it.key === 'source')!;
+
+      brandItems.children = [
+        {key: 'all', title: t('home.allBrand')},
+        ...brandList.map(b => ({key: b, title: b}))
+      ];
+
+      sourceItems.children = [
+        {key: 'all', title: t('home.allCarSource')},
+        ...sourceList.map(s => ({key: s, title: s}))
+      ];
+
+      return [...items];
+    });
+  });
+
+  // 切换语言
   useEffect(() => {
     changeLanguage(dropdownValue.language);
   }, [dropdownValue.language]);
 
+  // 基于查询条件过滤数据
   useEffect(() => {
     const {sorter, brand, source} = dropdownValue;
+
     const nextDataSource = originDataSource.filter((item: CarSource) => {
       const isBrand = brand.includes('all') ? true : brand.some((key: string) => item.brand === key);
       const isSource = source.includes('all') ? true : source.some((key: string) => item.deliveryCity === key);
 
       return isBrand && isSource;
     });
+
     nextDataSource.sort((a, b) => {
       const aTime = a.createTime || '';
       const bTime = b.createTime || '';
@@ -115,56 +159,37 @@ function Home() {
     setDataSource(nextDataSource);
   }, [dropdownValue, originDataSource]);
 
+  // 初始化查询数据
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
         const res = await axios.get('/data/car-source.json');
         const originDataSource = Array.isArray(res.data) ? res.data : [];
+
         originDataSource.forEach(item => {
+          // 基于语言，设置数据
+          Object.keys(item).forEach((key) => {
+            if (key.endsWith('En')) return;
+            item[key] = getValueByLanguage(item, key);
+          })
           const {carPhoto} = item;
 
           if (typeof carPhoto === 'string') {
             item.carPhoto = carPhoto.split(' ');
           }
         });
+
         setOriginDataSource(originDataSource);
-
-        setItems((items: DropdownSelectItemType[]) => {
-          const brand: string[] = [];
-          const source: string[] = [];
-
-          originDataSource.forEach((item) => {
-            if (item.brand && !brand.includes(item.brand)) {
-              brand.push(item.brand);
-            }
-            if (item.deliveryCity && !source.includes(item.deliveryCity)) {
-              source.push(item.deliveryCity);
-            }
-          });
-
-          const brandItems = items.find(it => it.key === 'brand')!;
-          const sourceItems = items.find(it => it.key === 'source')!;
-
-          brandItems.children = [
-            {key: 'all', title: t('home.allBrand')},
-            ...brand.map(b => ({key: b, title: b}))
-          ];
-
-          sourceItems.children = [
-            {key: 'all', title: t('home.allCarSource')},
-            ...source.map(s => ({key: s, title: s}))
-          ];
-
-          return [...items];
-        });
+        getItems(originDataSource);
       } finally {
         setLoading(false);
       }
     })()
-  }, []);
+  }, [getItems, getValueByLanguage]);
 
-  const rowRenderer = useFunction((options: {
+  // 必须使用 useCallback 否则排序时， dataSource.length 不改变，会导致 VirtualizedList 不渲染
+  const rowRenderer = useCallback((options: {
     index: number
     key: string
     style: CSSProperties
@@ -184,7 +209,7 @@ function Home() {
         />
       </div>
     );
-  });
+  }, [dataSource]);
 
   return (
     <PageContent className={s.root} loading={loading}>
@@ -223,7 +248,7 @@ function Home() {
                       rowCount={dataSource.length}
                       rowRenderer={rowRenderer}
                       width={width}
-                      rowHeight={px(220)}
+                      rowHeight={px(228)}
                       overscanRowCount={2}
                     />
                   )}

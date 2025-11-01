@@ -11,8 +11,6 @@ export type CarSource = {
   brand: string;
   /** 名称 */
   title: string;
-  /** 英文名称 */
-  titleEn: string;
   /** 指导价 */
   guidePrice: string;
   /** 优惠金额 */
@@ -101,36 +99,29 @@ export function CarCard(props: CarCardProps) {
         </div>
       </div>
       <div className={s.priceInfo}>
-        <div className={s.priceItem}>
-          <span className={s.label}>{t('home.guidancePrice')}</span>
-          <span className={s.value}>{guidePrice}</span>
-        </div>
-        <div className={s.priceItem}>
-          <span className={s.label}>{t('home.discountAmount')}</span>
-          <span className={s.value}>{discountAmount}</span>
-        </div>
-        <div className={s.priceItem}>
-          <span className={s.label}>{t('home.exportMethod')}</span>
-          <span className={s.value}>{exportMethod}</span>
-        </div>
-        <div className={s.priceItem}>
-          <span className={s.label}>{t('home.exportPrice')}</span>
-          <span className={s.value}>{exportPrice}</span>
-        </div>
+        {[
+          {label: t('home.guidancePrice'), value: guidePrice},
+          {label: t('home.discountAmount'), value: discountAmount},
+          {label: t('home.exportMethod'), value: exportMethod},
+          {label: t('home.exportPrice'), value: exportPrice},
+        ].map(item => {
+          const {label, value} = item;
+          return (
+            <div key={label} className={s.priceItem}>
+              <span className={s.label}>{label}</span>
+              <span className={s.value}>{value}</span>
+            </div>
+          );
+        })}
       </div>
       <div className={s.details}>
-        <span className={s.detailItem}>
-          <span>{color}</span>
-        </span>
-        <span className={s.detailItem}>
-          <span>{deliveryType}</span>
-        </span>
-        <span className={s.detailItem}>
-          <span>{deliveryCity}</span>
-        </span>
-        <span className={s.detailItem}>
-          <span>{insuranceType}</span>
-        </span>
+        {[color, deliveryType, deliveryCity, insuranceType].map((item, index) => {
+          return (
+            <div key={index} className={s.detailItem}>
+              <span><Ellipsis direction="end" rows={1} content={item || ''}/></span>
+            </div>
+          )
+        })}
       </div>
       <div
         className={s.contactWrap}
