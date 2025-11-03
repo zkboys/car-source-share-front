@@ -51,7 +51,7 @@ export function CarCard(props: CarCardProps) {
     carPhoto,
     title,
     guidePrice,
-    discountAmount,
+    // discountAmount,
     exportMethod,
     exportPrice,
     color,
@@ -101,7 +101,7 @@ export function CarCard(props: CarCardProps) {
       <div className={s.priceInfo}>
         {[
           {label: t('home.guidancePrice'), value: guidePrice},
-          {label: t('home.discountAmount'), value: discountAmount},
+          // {label: t('home.discountAmount'), value: discountAmount},
           {label: t('home.exportMethod'), value: exportMethod},
           {label: t('home.exportPrice'), value: exportPrice},
         ].map(item => {
