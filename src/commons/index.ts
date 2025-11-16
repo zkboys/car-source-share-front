@@ -1,8 +1,8 @@
 import {match} from "path-to-regexp";
 import pagesConfig from "~pages-config";
 import type {ConfigOptions} from "@/config-hoc/types";
-import {CarSource} from "@/pages/home/components";
 import {language} from "@/i18n";
+import { CarSource } from '@/types';
 
 export type PageConfig = ConfigOptions & {
   filePath: string;
