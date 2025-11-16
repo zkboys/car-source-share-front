@@ -7,6 +7,8 @@ const _routes = [
   {path: '*', element: <Error404/>}
 ]
 
+console.log(routes);
+
 export default function AppRouter() {
   return (
     <>

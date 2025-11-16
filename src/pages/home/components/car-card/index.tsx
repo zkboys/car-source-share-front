@@ -1,7 +1,9 @@
-import s from "./index.module.less";
+import s from './index.module.less';
 import weChatImg from './wechat.svg';
-import {Dialog, Ellipsis, Swiper} from "antd-mobile";
-import {t} from "@/i18n";
+import { Dialog, Ellipsis, Swiper } from 'antd-mobile';
+import { t } from '@/i18n';
+import { useFunction } from '@/hooks';
+import { useNavigate } from 'react-router';
 
 export type CarSource = {
   id: string | number;
@@ -40,14 +42,12 @@ export type CarSource = {
 export type CarCardProps = {
   data: CarSource;
   onImageClick: (images: string[], index: number) => void;
-}
+};
 
 export function CarCard(props: CarCardProps) {
+  const { data, onImageClick } = props;
   const {
-    data,
-    onImageClick,
-  } = props;
-  const {
+    id,
     carPhoto,
     title,
     guidePrice,
@@ -62,6 +62,12 @@ export function CarCard(props: CarCardProps) {
     contact,
     weChat,
   } = data || {};
+
+  const navigate = useNavigate();
+
+  const handleToDetail = useFunction(() => {
+    navigate(`/detail?id=${id}`);
+  });
 
   return (
     <div className={s.root}>
@@ -90,22 +96,24 @@ export function CarCard(props: CarCardProps) {
                 );
               })}
             </Swiper>
-          ) : <div className={s.noPhoto}>{t('home.noPhoto')}</div>}
+          ) : (
+            <div className={s.noPhoto}>{t('home.noPhoto')}</div>
+          )}
         </div>
         <div className={s.titleWrap}>
-          <div className={s.title}>
-            <Ellipsis direction="end" rows={3} content={title || ''}/>
+          <div className={s.title} onClick={handleToDetail}>
+            <Ellipsis direction="end" rows={3} content={title || ''} />
           </div>
         </div>
       </div>
-      <div className={s.priceInfo}>
+      <div className={s.priceInfo} onClick={handleToDetail}>
         {[
-          {label: t('home.guidancePrice'), value: guidePrice},
+          { label: t('home.guidancePrice'), value: guidePrice },
           // {label: t('home.discountAmount'), value: discountAmount},
-          {label: t('home.exportMethod'), value: exportMethod},
-          {label: t('home.exportPrice'), value: exportPrice},
-        ].map(item => {
-          const {label, value} = item;
+          { label: t('home.exportMethod'), value: exportMethod },
+          { label: t('home.exportPrice'), value: exportPrice },
+        ].map((item) => {
+          const { label, value } = item;
           return (
             <div key={label} className={s.priceItem}>
               <span className={s.label}>{label}</span>
@@ -114,14 +122,18 @@ export function CarCard(props: CarCardProps) {
           );
         })}
       </div>
-      <div className={s.details}>
-        {[color, deliveryType, deliveryCity, insuranceType].map((item, index) => {
-          return (
-            <div key={index} className={s.detailItem}>
-              <span><Ellipsis direction="end" rows={1} content={item || ''}/></span>
-            </div>
-          )
-        })}
+      <div className={s.details} onClick={handleToDetail}>
+        {[color, deliveryType, deliveryCity, insuranceType].map(
+          (item, index) => {
+            return (
+              <div key={index} className={s.detailItem}>
+                <span>
+                  <Ellipsis direction="end" rows={1} content={item || ''} />
+                </span>
+              </div>
+            );
+          },
+        )}
       </div>
       <div
         className={s.contactWrap}
@@ -131,16 +143,21 @@ export function CarCard(props: CarCardProps) {
             confirmText: t('home.iKnow'),
             content: (
               <div className={s.contactInfo}>
-                <div>{contact}：<a className={s.number} href={`tel:${number}`}>{number}</a></div>
+                <div>
+                  {contact}：
+                  <a className={s.number} href={`tel:${number}`}>
+                    {number}
+                  </a>
+                </div>
                 <div className={s.weChat}>
-                  <img src={weChat} alt={t('home.weChatQrCode')}/>
+                  <img src={weChat} alt={t('home.weChatQrCode')} />
                 </div>
               </div>
             ),
           })
         }
       >
-        <img className={s.weChatIcon} src={weChatImg} alt={t('home.weChat')}/>
+        <img className={s.weChatIcon} src={weChatImg} alt={t('home.weChat')} />
         <span className={s.contactText}>{t('home.addWeChat')}</span>
       </div>
     </div>

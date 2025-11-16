@@ -32,10 +32,10 @@ export default defineConfig({
     open: true, // 自动打开浏览器
     proxy: {
       // 代理规则
-      '/data/car-source.json': {
-        target: 'http://120.26.248.1', // 后端服务地址
+      '/api': {
+        target: 'http://localhost:3303', // 后端服务地址
         changeOrigin: true,
-        // rewrite: (path) => path.replace(/^\/api/, '/api') // 路径重写
+        rewrite: (path) => path.replace(/^\/api/, '') // 路径重写
       }
     }
   }
