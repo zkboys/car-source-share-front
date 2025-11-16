@@ -42,4 +42,6 @@ export type CarSource = {
   WeChatQRcode: string;
   /** 车辆配置 */
   vehicleConfiguration: string;
+  /** 车架号 */
+  VIN: string;
 };

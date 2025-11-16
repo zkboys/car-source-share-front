@@ -121,7 +121,7 @@ function Detail() {
             <div className={s.contentTitle}>{t('common.carInfo')}</div>
             <div className={s.item}>
               <div className={s.label}>{t('common.VINLabel')}</div>
-              <div className={s.value}>{data?.exportMethod ?? '-'}</div>
+              <div className={s.value}>{data?.VIN?.replace(/^(.{9}).{6}(.{2})$/, '$1******$2') ?? '-'}</div>
             </div>
             <div className={s.item}>
               <div className={s.label}>{t('common.deliveryCityLabel')}</div>
