@@ -139,7 +139,11 @@ function Detail() {
           </div>
           <div className={s.content}>
             <div className={s.contentTitle}>{t('common.configFeature')}</div>
-            <div className={s.feature}>{data?.vehicleConfiguration ?? '-'}</div>
+            <div className={s.feature}>
+              <pre>
+                {data?.vehicleConfiguration ?? '-'}
+              </pre>
+            </div>
           </div>
         </div>
       ) : null}
