@@ -66,7 +66,9 @@ export function CarCard(props: CarCardProps) {
   const navigate = useNavigate();
 
   const handleToDetail = useFunction(() => {
-    navigate(`/detail?id=${id}`);
+    console.log(navigate, id);
+    return;
+    // navigate(`/detail?id=${id}`);
   });
 
   return (
