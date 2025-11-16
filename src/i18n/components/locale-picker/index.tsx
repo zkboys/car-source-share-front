@@ -14,10 +14,8 @@ export function LocalePicker() {
     >
       {(_, actions) => {
         return (
-          <div className={s.root}>
-            <a className={s.text} onClick={actions.open}>
-              {t('common.language')}
-            </a>
+          <div className={s.root} onClick={actions.open}>
+            <a className={s.text}>{t('common.language')}</a>
             <DownFill />
           </div>
         );
