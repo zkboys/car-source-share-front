@@ -1,20 +1,15 @@
-import { PageContent } from '@/components';
-import { config } from '@/config-hoc';
-import { useFunction } from '@/hooks';
-import { language, LocalePicker, t } from '@/i18n';
-import { CarSource } from '@/pages/home/components';
-import { NavBar, Swiper } from 'antd-mobile';
+import {PageContent} from '@/components';
+import {config} from '@/config-hoc';
+import {useFunction} from '@/hooks';
+import {LocalePicker, t} from '@/i18n';
+import {CarSource} from '@/pages/home/components';
+import {ImageViewer, NavBar, Swiper} from 'antd-mobile';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import {useEffect, useRef, useState} from 'react';
+import {useNavigate, useSearchParams} from 'react-router';
 import s from './index.module.less';
+import {getDataByLanguage} from "@/commons";
 
-function getValueByLanguage(data: CarSource, field: string) {
-  const isEn = language === 'en-US';
-  const _field = isEn ? `${field}En` : field;
-  // @ts-ignore
-  return data[_field] || data[field] || '';
-}
 
 export default config<DetailProps>({
   title: t('detail.title'),
@@ -30,9 +25,15 @@ function Detail() {
   const id = searchParams.get('id');
   const navigate = useNavigate();
   const [data, setData] = useState<CarSource>();
+  const [viewerVisible, setViewerVisible] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
+  const imageViewerRef = useRef<any>(null);
+  const [viewerImages, setViewerImages] = useState<string[]>([]);
 
-  const handleImageClick = useFunction((carPhoto, index) => {
-    console.log(carPhoto, index);
+  const handleImageClick = useFunction((images, index) => {
+    setViewerImages(images);
+    imageViewerRef.current.swipeTo(index);
+    setViewerVisible(true);
   });
 
   useEffect(() => {
@@ -40,17 +41,7 @@ function Detail() {
       const res = await axios.get(`/api/car/source/detail?id=${id}`);
       const data = res.data.data;
       if (data) {
-        // 基于语言，设置数据
-        Object.keys(data).forEach((key) => {
-          if (key.endsWith('En')) return;
-          data[key] = getValueByLanguage(data, key);
-        });
-        const { carPhoto } = data;
-
-        if (typeof carPhoto === 'string') {
-          data.carPhoto = carPhoto.split(' ');
-        }
-        setData(res.data.data);
+        setData(getDataByLanguage(res.data.data));
       }
     })();
   }, [id]);
@@ -62,7 +53,7 @@ function Detail() {
       <NavBar
         className={s.nav}
         onBack={() => navigate(-1)}
-        right={<LocalePicker />}
+        right={<LocalePicker/>}
       >
         {t('detail.title')}
       </NavBar>
@@ -98,6 +89,16 @@ function Detail() {
           </div>
         </div>
       ) : null}
+
+      <ImageViewer.Multi
+        ref={imageViewerRef}
+        getContainer={() => document.body}
+        images={viewerImages}
+        visible={viewerVisible}
+        defaultIndex={viewerIndex}
+        onIndexChange={(index) => setViewerIndex(index)}
+        onClose={() => setViewerVisible(false)}
+      />
     </PageContent>
   );
 }

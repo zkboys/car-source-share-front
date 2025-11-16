@@ -1,6 +1,8 @@
 import {match} from "path-to-regexp";
 import pagesConfig from "~pages-config";
 import type {ConfigOptions} from "@/config-hoc/types";
+import {CarSource} from "@/pages/home/components";
+import {language} from "@/i18n";
 
 export type PageConfig = ConfigOptions & {
   filePath: string;
@@ -93,4 +95,35 @@ export function vwToPx(
  */
 export function px(oldPx: number, viewportWidth: number = VIEWPORT_WIDTH): number {
   return (window.innerWidth / viewportWidth) * oldPx;
+}
+
+/**
+ * 数据约定，field以En结尾的为英文
+ * @param data
+ * @param field
+ */
+export function getValueByLanguage(data: CarSource, field: string) {
+  const isEn = language === 'en-US';
+  const _field = isEn ? `${field}En` : field;
+  // @ts-ignore
+  return data[_field] || data[field] || '';
+}
+
+/**
+ * 基于语言获取数据
+ * @param data
+ */
+export function getDataByLanguage(data: CarSource) {
+  Object.keys(data).forEach((key: string) => {
+    if (key.endsWith('En')) return;
+
+    // @ts-ignore
+    data[key] = getValueByLanguage(data, key);
+  });
+  const {carPhoto} = data;
+
+  if (typeof (carPhoto as any) === 'string') {
+    data.carPhoto = (carPhoto as unknown as string).split(' ');
+  }
+  return data;
 }

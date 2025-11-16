@@ -1,21 +1,13 @@
-import { extractNumber, px } from '@/commons';
-import {
-  DropdownSelect,
-  DropdownSelectItemType,
-  PageContent,
-} from '@/components';
-import { config } from '@/config-hoc';
-import { useFunction } from '@/hooks';
-import { changeLanguage, language, localeOptions, t } from '@/i18n';
-import { ErrorBlock, ImageViewer } from 'antd-mobile';
+import {extractNumber, getDataByLanguage, px} from '@/commons';
+import {DropdownSelect, DropdownSelectItemType, PageContent,} from '@/components';
+import {config} from '@/config-hoc';
+import {useFunction} from '@/hooks';
+import {changeLanguage, language, localeOptions, t} from '@/i18n';
+import {ErrorBlock, ImageViewer} from 'antd-mobile';
 import axios from 'axios';
-import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
-import {
-  AutoSizer,
-  List as VirtualizedList,
-  WindowScroller,
-} from 'react-virtualized';
-import { CarCard, type CarSource, Header } from './components';
+import {CSSProperties, useCallback, useEffect, useRef, useState} from 'react';
+import {AutoSizer, List as VirtualizedList, WindowScroller,} from 'react-virtualized';
+import {CarCard, type CarSource, Header} from './components';
 import s from './index.module.less';
 
 type HomeProps = {
@@ -38,22 +30,22 @@ const initItems = [
     key: 'sorter',
     title: t('home.sort'),
     children: [
-      { key: 'all', title: t('home.defaultSort') },
-      { key: 'desc', title: t('home.exportPriceHighest') },
-      { key: 'asc', title: t('home.exportPriceLowest') },
+      {key: 'all', title: t('home.defaultSort')},
+      {key: 'desc', title: t('home.exportPriceHighest')},
+      {key: 'asc', title: t('home.exportPriceLowest')},
     ],
   },
   {
     key: 'brand',
     title: t('home.brand'),
     multiple: true,
-    children: [{ key: 'all', title: t('home.allBrand') }],
+    children: [{key: 'all', title: t('home.allBrand')}],
   },
   {
     key: 'source',
     title: t('home.carSource'),
     multiple: true,
-    children: [{ key: 'all', title: t('home.allCarSource') }],
+    children: [{key: 'all', title: t('home.allCarSource')}],
   },
   {
     key: 'language',
@@ -81,13 +73,6 @@ function Home() {
   const [viewerIndex, setViewerIndex] = useState(0);
   const imageViewerRef = useRef<any>(null);
   const [viewerImages, setViewerImages] = useState<string[]>([]);
-  const isEn = language === 'en-US';
-
-  const getValueByLanguage = useFunction((data: CarSource, field: string) => {
-    const _field = isEn ? `${field}En` : field;
-    // @ts-ignore
-    return data[_field] || data[field] || '';
-  });
 
   // 获取顶层查询条件项
   const getItems = useFunction((originDataSource: CarSource[]) => {
@@ -96,7 +81,7 @@ function Home() {
       const sourceList: string[] = [];
 
       originDataSource.forEach((item) => {
-        const { brand, deliveryCity } = item;
+        const {brand, deliveryCity} = item;
         if (brand && !brandList.includes(brand)) {
           brandList.push(brand);
         }
@@ -109,13 +94,13 @@ function Home() {
       const sourceItems = items.find((it) => it.key === 'source')!;
 
       brandItems.children = [
-        { key: 'all', title: t('home.allBrand') },
-        ...brandList.map((b) => ({ key: b, title: b })),
+        {key: 'all', title: t('home.allBrand')},
+        ...brandList.map((b) => ({key: b, title: b})),
       ];
 
       sourceItems.children = [
-        { key: 'all', title: t('home.allCarSource') },
-        ...sourceList.map((s) => ({ key: s, title: s })),
+        {key: 'all', title: t('home.allCarSource')},
+        ...sourceList.map((s) => ({key: s, title: s})),
       ];
 
       return [...items];
@@ -129,7 +114,7 @@ function Home() {
 
   // 基于查询条件过滤数据
   useEffect(() => {
-    const { sorter, brand, source } = dropdownValue;
+    const {sorter, brand, source} = dropdownValue;
 
     const nextDataSource = originDataSource.filter((item: CarSource) => {
       const isBrand = brand.includes('all')
@@ -179,31 +164,22 @@ function Home() {
           ? res.data.data
           : [];
 
-        originDataSource.forEach((item: any) => {
-          // 基于语言，设置数据
-          Object.keys(item).forEach((key) => {
-            if (key.endsWith('En')) return;
-            item[key] = getValueByLanguage(item, key);
-          });
-          const { carPhoto } = item;
-
-          if (typeof carPhoto === 'string') {
-            item.carPhoto = carPhoto.split(' ');
-          }
+        const nextDataSource = originDataSource.map((item: any) => {
+          return getDataByLanguage(item);
         });
 
-        setOriginDataSource(originDataSource);
-        getItems(originDataSource);
+        setOriginDataSource(nextDataSource);
+        getItems(nextDataSource);
       } finally {
         setLoading(false);
       }
     })();
-  }, [getItems, getValueByLanguage]);
+  }, [getItems]);
 
   // 必须使用 useCallback 否则排序时， dataSource.length 不改变，会导致 VirtualizedList 不渲染
   const rowRenderer = useCallback(
     (options: { index: number; key: string; style: CSSProperties }) => {
-      const { index, key, style } = options;
+      const {index, key, style} = options;
       const item = dataSource[index];
 
       return (
@@ -225,7 +201,7 @@ function Home() {
   return (
     <PageContent className={s.root} loading={loading}>
       <div className={s.top}>
-        <Header />
+        <Header/>
         <DropdownSelect
           value={dropdownValue}
           onChange={(value) => setDropdownValue(value as DropdownValueType)}
@@ -244,10 +220,10 @@ function Home() {
           // : dataSource.map((_item, index) => rowRenderer({ index, key: `${index}`, style: {} }))
           /* @ts-ignore */
           <WindowScroller>
-            {({ height, isScrolling, onChildScroll, scrollTop }) => (
+            {({height, isScrolling, onChildScroll, scrollTop}) => (
               /* @ts-ignore */
               <AutoSizer disableHeight>
-                {({ width }) => (
+                {({width}) => (
                   /* @ts-ignore */
                   <VirtualizedList
                     autoHeight
