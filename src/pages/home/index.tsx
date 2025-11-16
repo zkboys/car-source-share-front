@@ -2,7 +2,7 @@ import {extractNumber, getDataByLanguage, px} from '@/commons';
 import {DropdownSelect, DropdownSelectItemType, PageContent,} from '@/components';
 import {config} from '@/config-hoc';
 import {useFunction} from '@/hooks';
-import {changeLanguage, language, localeOptions, t} from '@/i18n';
+import {t} from '@/i18n';
 import {ErrorBlock, ImageViewer} from 'antd-mobile';
 import {CSSProperties, useCallback, useEffect, useRef, useState} from 'react';
 import {AutoSizer, List as VirtualizedList, WindowScroller,} from 'react-virtualized';
@@ -19,42 +19,40 @@ type DropdownValueType = {
   sorter: string;
   brand: string[];
   source: string[];
-  language: string;
+  deliveryType: string[];
 };
 
 export default config<HomeProps>({
-  title: t('home.title'),
+  title: t('common.title'),
 })(Home);
 
 const initItems = [
   {
     key: 'sorter',
-    title: t('home.sort'),
+    title: t('common.sort'),
     children: [
-      {key: 'all', title: t('home.defaultSort')},
-      {key: 'desc', title: t('home.exportPriceHighest')},
-      {key: 'asc', title: t('home.exportPriceLowest')},
+      {key: 'all', title: t('common.defaultSort')},
+      {key: 'desc', title: t('common.exportPriceHighest')},
+      {key: 'asc', title: t('common.exportPriceLowest')},
     ],
   },
   {
     key: 'brand',
-    title: t('home.brand'),
+    title: t('common.brand'),
     multiple: true,
-    children: [{key: 'all', title: t('home.allBrand')}],
+    children: [{key: 'all', title: t('common.allBrand')}],
   },
   {
     key: 'source',
-    title: t('home.carSource'),
+    title: t('common.carSource'),
     multiple: true,
-    children: [{key: 'all', title: t('home.allCarSource')}],
+    children: [{key: 'all', title: t('common.allCarSource')}],
   },
   {
-    key: 'language',
-    title: t('home.language'),
-    children: localeOptions.map((item) => ({
-      key: item.value,
-      title: item.label,
-    })),
+    key: 'deliveryType',
+    title: t('common.deliveryType'),
+    multiple: true,
+    children: [{key: 'all', title: t('common.allDeliveryType')}],
   },
 ];
 
@@ -65,7 +63,7 @@ function Home() {
     sorter: 'all',
     brand: ['all'],
     source: ['all'],
-    language: language,
+    deliveryType: ['all'],
   });
   const [originDataSource, setOriginDataSource] = useState<CarSource[]>([]);
   const [dataSource, setDataSource] = useState<CarSource[]>([]);
@@ -81,38 +79,44 @@ function Home() {
     setItems((items: DropdownSelectItemType[]) => {
       const brandList: string[] = [];
       const sourceList: string[] = [];
+      const deliveryTypeList: string[] = [];
 
       originDataSource.forEach((item) => {
-        const {brand, deliveryCity} = item;
+        const {brand, deliveryCity, deliveryType} = item;
         if (brand && !brandList.includes(brand)) {
           brandList.push(brand);
         }
         if (deliveryCity && !sourceList.includes(deliveryCity)) {
           sourceList.push(deliveryCity);
         }
+
+        if (deliveryType && !deliveryTypeList.includes(deliveryType)) {
+          deliveryTypeList.push(deliveryType);
+        }
       });
 
       const brandItems = items.find((it) => it.key === 'brand')!;
       const sourceItems = items.find((it) => it.key === 'source')!;
+      const deliveryTypeItems = items.find((it) => it.key === 'deliveryType')!;
 
       brandItems.children = [
-        {key: 'all', title: t('home.allBrand')},
+        {key: 'all', title: t('common.allBrand')},
         ...brandList.map((b) => ({key: b, title: b})),
       ];
 
       sourceItems.children = [
-        {key: 'all', title: t('home.allCarSource')},
+        {key: 'all', title: t('common.allCarSource')},
         ...sourceList.map((s) => ({key: s, title: s})),
+      ];
+
+      deliveryTypeItems.children = [
+        {key: 'all', title: t('common.allDeliveryType')},
+        ...deliveryTypeList.map((s) => ({key: s, title: s})),
       ];
 
       return [...items];
     });
   });
-
-  // 切换语言
-  useEffect(() => {
-    changeLanguage(dropdownValue.language);
-  }, [dropdownValue.language]);
 
   // 查询公司数据
   useEffect(() => {
@@ -124,7 +128,7 @@ function Home() {
 
   // 基于查询条件过滤数据
   useEffect(() => {
-    const {sorter, brand, source} = dropdownValue;
+    const {sorter, brand, source, deliveryType} = dropdownValue;
 
     const nextDataSource = originDataSource.filter((item: CarSource) => {
       const isBrand = brand.includes('all')
@@ -134,7 +138,11 @@ function Home() {
         ? true
         : source.some((key: string) => item.deliveryCity === key);
 
-      return isBrand && isSource;
+      const isDeliveryType = deliveryType.includes('all')
+        ? true
+        : deliveryType.some((key: string) => item.deliveryType === key);
+
+      return isBrand && isSource && isDeliveryType;
     });
 
     nextDataSource.sort((a, b) => {

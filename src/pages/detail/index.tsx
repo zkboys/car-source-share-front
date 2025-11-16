@@ -1,18 +1,18 @@
 import {PageContent} from '@/components';
 import {config} from '@/config-hoc';
 import {useFunction} from '@/hooks';
-import {LocalePicker, t} from '@/i18n';
-import {CarSource} from '@/pages/home/components';
+import {language, LocalePicker, t} from '@/i18n';
 import {ImageViewer, NavBar, Swiper} from 'antd-mobile';
 import {useEffect, useRef, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router';
 import s from './index.module.less';
 import {getDataByLanguage} from "@/commons";
 import {ajax} from "@/commons/ajax";
-
+import {CarSource} from "@/types";
+import c from 'classnames';
 
 export default config<DetailProps>({
-  title: t('detail.title'),
+  title: t('common.detail.title'),
   path: '/detail',
 })(Detail);
 
@@ -49,13 +49,13 @@ function Detail() {
   const carPhoto = data?.carPhoto;
 
   return (
-    <PageContent>
+    <PageContent className={c(s.root, s[language])}>
       <NavBar
         className={s.nav}
         onBack={() => navigate(-1)}
         right={<LocalePicker/>}
       >
-        {t('detail.title')}
+        {t('common.detail.title')}
       </NavBar>
       {data ? (
         <div>
@@ -68,7 +68,7 @@ function Detail() {
                   </div>
                 )}
               >
-                {carPhoto?.map((url, index) => {
+                {carPhoto?.map((url: string, index: number) => {
                   return (
                     <Swiper.Item key={url}>
                       <img
@@ -84,8 +84,50 @@ function Detail() {
                 })}
               </Swiper>
             ) : (
-              <div className={s.noPhoto}>{t('home.noPhoto')}</div>
+              <div className={s.noPhoto}>{t('common.noPhoto')}</div>
             )}
+          </div>
+          <div className={s.content}>
+            <div className={s.title}>{data?.title}</div>
+            <div className={s.item}>
+              <div className={s.label}>{t('common.deliveryTypeLabel')}</div>
+              <div className={s.value}>{data?.deliveryType ?? '-'}</div>
+            </div>
+            <div className={s.item}>
+              <div className={s.label}>{t('common.colorLabel')}</div>
+              <div className={s.value}>{data?.color ?? '-'}</div>
+            </div>
+            <div className={s.item}>
+              <div className={s.label}>{t('common.guidePriceLabel')}</div>
+              <div className={s.value}>{data?.guidePrice ?? '-'}</div>
+            </div>
+            <div className={s.item}>
+              <div className={s.label}>{t('common.exportPriceLabel')}</div>
+              <div className={s.value}>{data?.exportPrice ?? '-'}</div>
+            </div>
+            <div className={s.item}>
+              <div className={s.label}>{t('common.exportMethodLabel')}</div>
+              <div className={s.value}>{data?.exportMethod ?? '-'}</div>
+            </div>
+          </div>
+          <div className={s.content}>
+            <div className={s.contentTitle}>{t('common.carInfo')}</div>
+            <div className={s.item}>
+              <div className={s.label}>{t('common.VINLabel')}</div>
+              <div className={s.value}>{data?.exportMethod ?? '-'}</div>
+            </div>
+            <div className={s.item}>
+              <div className={s.label}>{t('common.deliveryCityLabel')}</div>
+              <div className={s.value}>{data?.deliveryCity ?? '-'}</div>
+            </div>
+            <div className={s.item}>
+              <div className={s.label}>{t('common.insuranceTypeLabel')}</div>
+              <div className={s.value}>{data?.insuranceType ?? '-'}</div>
+            </div>
+          </div>
+          <div className={s.content}>
+            <div className={s.contentTitle}>{t('common.configFeature')}</div>
+            <div className={s.feature}>TODO</div>
           </div>
         </div>
       ) : null}

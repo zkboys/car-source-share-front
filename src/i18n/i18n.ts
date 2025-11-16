@@ -56,6 +56,8 @@ export function t(key: string, options?: any): string {
 // 当前语言
 export const language = i18n.language;
 
+export const isEn = language === "en-US";
+
 // 切换语言
 export function changeLanguage(lng: string) {
   i18n.changeLanguage(lng);

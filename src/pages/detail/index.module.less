@@ -25,3 +25,49 @@
   }
 
 }
+
+.content {
+  padding: 16px;
+  border-bottom: 8px solid #f1f1f1;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .contentTitle {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .feature {
+
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    padding: 8px 0;
+
+    .label {
+      flex: 0 0 80px;
+      text-align: right;
+    }
+
+    .value {
+      flex: 1;
+      font-weight: bold;
+    }
+  }
+}
+
+.en-US {
+  .label {
+    flex: 0 0 100px !important;
+    margin-right: 8px;
+  }
+}

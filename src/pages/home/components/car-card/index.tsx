@@ -64,7 +64,7 @@ export function CarCard(props: CarCardProps) {
               })}
             </Swiper>
           ) : (
-            <div className={s.noPhoto}>{t('home.noPhoto')}</div>
+            <div className={s.noPhoto}>{t('common.noPhoto')}</div>
           )}
         </div>
         <div className={s.titleWrap}>
@@ -75,10 +75,10 @@ export function CarCard(props: CarCardProps) {
       </div>
       <div className={s.priceInfo} onClick={handleToDetail}>
         {[
-          { label: t('home.guidancePrice'), value: guidePrice },
-          // {label: t('home.discountAmount'), value: discountAmount},
-          { label: t('home.exportMethod'), value: exportMethod },
-          { label: t('home.exportPrice'), value: exportPrice },
+          { label: t('common.guidancePrice'), value: guidePrice },
+          // {label: t('common.discountAmount'), value: discountAmount},
+          { label: t('common.exportMethod'), value: exportMethod },
+          { label: t('common.exportPrice'), value: exportPrice },
         ].map((item) => {
           const { label, value } = item;
           return (
@@ -107,7 +107,7 @@ export function CarCard(props: CarCardProps) {
         onClick={() =>
           Dialog.alert({
             className: s.weChatDialog,
-            confirmText: t('home.iKnow'),
+            confirmText: t('common.iKnow'),
             content: (
               <div className={s.contactInfo}>
                 <div>
@@ -117,15 +117,15 @@ export function CarCard(props: CarCardProps) {
                   </a>
                 </div>
                 <div className={s.weChat}>
-                  <img src={weChat} alt={t('home.weChatQrCode')} />
+                  <img src={weChat} alt={t('common.weChatQrCode')} />
                 </div>
               </div>
             ),
           })
         }
       >
-        <img className={s.weChatIcon} src={weChatImg} alt={t('home.weChat')} />
-        <span className={s.contactText}>{t('home.addWeChat')}</span>
+        <img className={s.weChatIcon} src={weChatImg} alt={t('common.weChat')} />
+        <span className={s.contactText}>{t('common.addWeChat')}</span>
       </div>
     </div>
   );
