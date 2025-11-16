@@ -1,5 +1,6 @@
-import axios, {AxiosRequestHeaders} from 'axios';
-import {normalizeAxios} from "@/commons/normalize-axios.ts";
+import { normalizeAxios } from '@/commons/normalize-axios.ts';
+import { CONFIG } from '@/config';
+import axios, { AxiosRequestHeaders } from 'axios';
 
 const instance = axios.create({
   baseURL: '/api',
@@ -7,7 +8,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   if (!config.headers) config.headers = {} as AxiosRequestHeaders;
-  config.headers['x-company-id'] = 'ktc';
+  config.headers['x-company-id'] = CONFIG.companyId;
 
   return config;
 });
