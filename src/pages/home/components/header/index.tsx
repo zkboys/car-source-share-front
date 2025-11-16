@@ -1,10 +1,16 @@
 import s from "./index.module.less";
-import { t } from "@/i18n";
-export function Header() {
+import {Company} from "@/types";
+
+export type HeaderProps = {
+  company?: Company;
+};
+
+export function Header(props: HeaderProps) {
+  const {company} = props;
   return (
     <div className={s.root}>
-      <img className={s.logo} src="/logo2x.png" alt="logo" />
-      <div className={s.title}>{t('home.title')}</div>
+      <img className={s.logo} src={company?.logo} alt="logo"/>
+      <div className={s.title}>{company?.companyName}</div>
     </div>
   );
 }

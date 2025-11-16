@@ -113,7 +113,7 @@ export function getValueByLanguage(data: CarSource, field: string) {
  * 基于语言获取数据
  * @param data
  */
-export function getDataByLanguage(data: CarSource) {
+export function getDataByLanguage<T extends Record<string, any>>(data: T): T {
   Object.keys(data).forEach((key: string) => {
     if (key.endsWith('En')) return;
 
@@ -123,6 +123,7 @@ export function getDataByLanguage(data: CarSource) {
   const {carPhoto} = data;
 
   if (typeof (carPhoto as any) === 'string') {
+    // @ts-ignore
     data.carPhoto = (carPhoto as unknown as string).split(' ');
   }
   return data;

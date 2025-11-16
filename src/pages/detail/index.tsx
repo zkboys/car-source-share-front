@@ -4,11 +4,11 @@ import {useFunction} from '@/hooks';
 import {LocalePicker, t} from '@/i18n';
 import {CarSource} from '@/pages/home/components';
 import {ImageViewer, NavBar, Swiper} from 'antd-mobile';
-import axios from 'axios';
 import {useEffect, useRef, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router';
 import s from './index.module.less';
 import {getDataByLanguage} from "@/commons";
+import {ajax} from "@/commons/ajax";
 
 
 export default config<DetailProps>({
@@ -38,10 +38,10 @@ function Detail() {
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get(`/api/car/source/detail?id=${id}`);
-      const data = res.data.data;
+      const res = await ajax.get(`/car/source/detail?id=${id}`);
+      const data = res.data;
       if (data) {
-        setData(getDataByLanguage(res.data.data));
+        setData(getDataByLanguage(data));
       }
     })();
   }, [id]);

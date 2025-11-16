@@ -4,11 +4,12 @@ import {config} from '@/config-hoc';
 import {useFunction} from '@/hooks';
 import {changeLanguage, language, localeOptions, t} from '@/i18n';
 import {ErrorBlock, ImageViewer} from 'antd-mobile';
-import axios from 'axios';
 import {CSSProperties, useCallback, useEffect, useRef, useState} from 'react';
 import {AutoSizer, List as VirtualizedList, WindowScroller,} from 'react-virtualized';
-import {CarCard, type CarSource, Header} from './components';
+import {CarCard, Header} from './components';
 import s from './index.module.less';
+import {ajax} from "@/commons/ajax";
+import {CarSource, Company} from '@/types';
 
 type HomeProps = {
   title: string;
@@ -73,6 +74,7 @@ function Home() {
   const [viewerIndex, setViewerIndex] = useState(0);
   const imageViewerRef = useRef<any>(null);
   const [viewerImages, setViewerImages] = useState<string[]>([]);
+  const [company, setCompany] = useState<Company>()
 
   // 获取顶层查询条件项
   const getItems = useFunction((originDataSource: CarSource[]) => {
@@ -111,6 +113,14 @@ function Home() {
   useEffect(() => {
     changeLanguage(dropdownValue.language);
   }, [dropdownValue.language]);
+
+  // 查询公司数据
+  useEffect(() => {
+    (async () => {
+      const res = await ajax.get('/company');
+      setCompany(getDataByLanguage<Company>(res.data));
+    })()
+  }, []);
 
   // 基于查询条件过滤数据
   useEffect(() => {
@@ -159,9 +169,9 @@ function Home() {
     (async () => {
       try {
         setLoading(true);
-        const res = await axios.get('/api/car/source');
-        const originDataSource = Array.isArray(res.data.data)
-          ? res.data.data
+        const res = await ajax.get('/car/source');
+        const originDataSource = Array.isArray(res.data)
+          ? res.data
           : [];
 
         const nextDataSource = originDataSource.map((item: any) => {
@@ -201,7 +211,7 @@ function Home() {
   return (
     <PageContent className={s.root} loading={loading}>
       <div className={s.top}>
-        <Header/>
+        <Header company={company}/>
         <DropdownSelect
           value={dropdownValue}
           onChange={(value) => setDropdownValue(value as DropdownValueType)}
