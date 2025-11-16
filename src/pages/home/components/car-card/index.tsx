@@ -1,10 +1,11 @@
 import s from './index.module.less';
 import weChatImg from './wechat.svg';
-import { Dialog, Ellipsis, Swiper } from 'antd-mobile';
-import { t } from '@/i18n';
-import { useFunction } from '@/hooks';
-import { useNavigate } from 'react-router';
+import {Ellipsis, Swiper} from 'antd-mobile';
+import {t} from '@/i18n';
+import {useFunction} from '@/hooks';
+import {useNavigate} from 'react-router';
 import {CarSource} from "@/types";
+import {ContactDialog} from "@/components";
 
 export type CarCardProps = {
   data: CarSource;
@@ -12,7 +13,7 @@ export type CarCardProps = {
 };
 
 export function CarCard(props: CarCardProps) {
-  const { data, onImageClick } = props;
+  const {data, onImageClick} = props;
   const {
     id,
     carPhoto,
@@ -69,18 +70,18 @@ export function CarCard(props: CarCardProps) {
         </div>
         <div className={s.titleWrap}>
           <div className={s.title} onClick={handleToDetail}>
-            <Ellipsis direction="end" rows={3} content={title || ''} />
+            <Ellipsis direction="end" rows={3} content={title || ''}/>
           </div>
         </div>
       </div>
       <div className={s.priceInfo} onClick={handleToDetail}>
         {[
-          { label: t('common.guidancePrice'), value: guidePrice },
+          {label: t('common.guidancePrice'), value: guidePrice},
           // {label: t('common.discountAmount'), value: discountAmount},
-          { label: t('common.exportMethod'), value: exportMethod },
-          { label: t('common.exportPrice'), value: exportPrice },
+          {label: t('common.exportMethod'), value: exportMethod},
+          {label: t('common.exportPrice'), value: exportPrice},
         ].map((item) => {
-          const { label, value } = item;
+          const {label, value} = item;
           return (
             <div key={label} className={s.priceItem}>
               <span className={s.label}>{label}</span>
@@ -95,38 +96,21 @@ export function CarCard(props: CarCardProps) {
             return (
               <div key={index} className={s.detailItem}>
                 <span>
-                  <Ellipsis direction="end" rows={1} content={item || ''} />
+                  <Ellipsis direction="end" rows={1} content={item || ''}/>
                 </span>
               </div>
             );
           },
         )}
       </div>
-      <div
-        className={s.contactWrap}
-        onClick={() =>
-          Dialog.alert({
-            className: s.weChatDialog,
-            confirmText: t('common.iKnow'),
-            content: (
-              <div className={s.contactInfo}>
-                <div>
-                  {contact}：
-                  <a className={s.number} href={`tel:${number}`}>
-                    {number}
-                  </a>
-                </div>
-                <div className={s.weChat}>
-                  <img src={weChat} alt={t('common.weChatQrCode')} />
-                </div>
-              </div>
-            ),
-          })
-        }
+      <ContactDialog
+        contact={contact}
+        number={number}
+        weChat={weChat}
       >
-        <img className={s.weChatIcon} src={weChatImg} alt={t('common.weChat')} />
+        <img className={s.weChatIcon} src={weChatImg} alt={t('common.weChat')}/>
         <span className={s.contactText}>{t('common.addWeChat')}</span>
-      </div>
+      </ContactDialog>
     </div>
   );
 }

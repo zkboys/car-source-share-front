@@ -1,15 +1,22 @@
-import {PageContent} from '@/components';
-import {config} from '@/config-hoc';
-import {useFunction} from '@/hooks';
-import {language, LocalePicker, t} from '@/i18n';
-import {ImageViewer, NavBar, Swiper} from 'antd-mobile';
-import {useEffect, useRef, useState} from 'react';
-import {useNavigate, useSearchParams} from 'react-router';
-import s from './index.module.less';
-import {getDataByLanguage} from "@/commons";
-import {ajax} from "@/commons/ajax";
-import {CarSource} from "@/types";
+import { getDataByLanguage } from '@/commons';
+import { ajax } from '@/commons/ajax';
+import { ContactDialog, PageContent } from '@/components';
+import { config } from '@/config-hoc';
+import { useFunction } from '@/hooks';
+import { language, LocalePicker, t } from '@/i18n';
+import { CarSource } from '@/types';
+import {
+  Button,
+  ImageViewer,
+  NavBar,
+  SafeArea,
+  Space,
+  Swiper,
+} from 'antd-mobile';
 import c from 'classnames';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
+import s from './index.module.less';
 
 export default config<DetailProps>({
   title: t('common.detail.title'),
@@ -53,12 +60,12 @@ function Detail() {
       <NavBar
         className={s.nav}
         onBack={() => navigate(-1)}
-        right={<LocalePicker/>}
+        right={<LocalePicker />}
       >
         {t('common.detail.title')}
       </NavBar>
       {data ? (
-        <div>
+        <div className={s.contentWrapper}>
           <div className={s.images}>
             {carPhoto?.length ? (
               <Swiper
@@ -127,11 +134,34 @@ function Detail() {
           </div>
           <div className={s.content}>
             <div className={s.contentTitle}>{t('common.configFeature')}</div>
-            <div className={s.feature}>TODO</div>
+            <div className={s.feature}>{data?.vehicleConfiguration ?? '-'}</div>
           </div>
         </div>
       ) : null}
+      <div className={s.footer}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <ContactDialog className={s.contact} weChat={data?.WeChatQRcode}>
+            <Button block>
+              <div className={s.follow}>
+                <span>{t('common.followForFurther')}</span>
+                <a>{t('common.follow')}</a>
+              </div>
+            </Button>
+          </ContactDialog>
 
+          <ContactDialog
+            className={s.contact}
+            contact={data?.contact}
+            number={data?.number}
+            weChat={data?.weChat}
+          >
+            <Button color="primary" block>
+              {t('common.contactSupplier')}
+            </Button>
+          </ContactDialog>
+        </Space>
+        <SafeArea position="bottom" />
+      </div>
       <ImageViewer.Multi
         ref={imageViewerRef}
         getContainer={() => document.body}

@@ -38,4 +38,8 @@ export type CarSource = {
   number: string;
   /** 创建时间 */
   createTime: string;
+  /** 公众号二维码 */
+  WeChatQRcode: string;
+  /** 车辆配置 */
+  vehicleConfiguration: string;
 };

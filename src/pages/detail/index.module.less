@@ -5,10 +5,21 @@
 .nav {
   background: var(--adm-color-primary);
   color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+}
+
+.contentWrapper {
+  padding-bottom: 120px;
+  background: #f1f1f1;
 }
 
 .images {
   position: relative;
+  padding-top: 45px;
 
   .image {
     width: 100%;
@@ -28,10 +39,11 @@
 
 .content {
   padding: 16px;
-  border-bottom: 8px solid #f1f1f1;
+  background: #fff;
+  margin-bottom: 8px;
 
   &:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
   }
 
   .title {
@@ -63,6 +75,32 @@
       font-weight: bold;
     }
   }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+
+  :global {
+    .adm-button {
+      border-radius: 0;
+    }
+  }
+}
+
+.contact {
+  padding: 0;
+  border: none;
+}
+
+.follow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
 }
 
 .en-US {

@@ -31,5 +31,8 @@
   "common.VINLabel": "VIN:",
   "common.deliveryCityLabel": "Location:",
   "common.insuranceTypeLabel": "Insurance:",
-  "common.configFeature": "Configuration Highlights"
+  "common.configFeature": "Configuration Highlights",
+  "common.contactSupplier": "Contact the supplier",
+  "common.followForFurther": "Follow WeChat for more information",
+  "common.follow": "Follow WeChat"
 }

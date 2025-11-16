@@ -3,3 +3,4 @@ export * from "./layout";
 export * from "./enum";
 export * from "./global-loading";
 export * from "./dropdown-select";
+export * from "./contact-dialog";

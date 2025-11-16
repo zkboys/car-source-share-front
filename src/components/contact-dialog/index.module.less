@@ -1,0 +1,39 @@
+
+.contactWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #eee;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+
+  .weChat {
+    min-height: 280px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .number {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.weChatDialog {
+  :global {
+    .adm-dialog-content {
+      padding-bottom: 0;
+    }
+  }
+}
